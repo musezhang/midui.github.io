@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-07-30T07:50:04.000Z</updated>
+  <updated>2017-08-09T15:23:33.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,61 +16,73 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>必须好用的git命令2</title>
-    <link href="http://yoursite.com/2017/07/30/useful-git-command-2/"/>
-    <id>http://yoursite.com/2017/07/30/useful-git-command-2/</id>
-    <published>2017-07-30T07:30:54.000Z</published>
-    <updated>2017-07-30T07:50:04.000Z</updated>
+    <title>mysql查询数据库和表所占空间大小</title>
+    <link href="http://yoursite.com/2017/08/08/mysql-space-used/"/>
+    <id>http://yoursite.com/2017/08/08/mysql-space-used/</id>
+    <published>2017-08-08T15:50:00.000Z</published>
+    <updated>2017-08-09T15:23:33.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>此文件是为了留底，找时间排查原因，在增加内容就无法渲染的问题<br>并且上个blog不知是什么原因，再多加代码段就会报错。</p>
-<h2 id="git设置颜色高亮显示"><a href="#git设置颜色高亮显示" class="headerlink" title="git设置颜色高亮显示"></a>git设置颜色高亮显示</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git<span class="built_in"> config </span>--global  color.ui <span class="literal">true</span></div></pre></td></tr></table></figure>
-<h2 id="git-命令别名设置"><a href="#git-命令别名设置" class="headerlink" title="git 命令别名设置"></a>git 命令别名设置</h2><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git<span class="built_in"> config </span>--global  alias.br   branch</div></pre></td></tr></table></figure>
-<a id="more"></a>
-<h2 id="查看git提交日志"><a href="#查看git提交日志" class="headerlink" title="查看git提交日志"></a>查看git提交日志</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">log</span></div></pre></td></tr></table></figure>
-<h2 id="查看最近的提交内容"><a href="#查看最近的提交内容" class="headerlink" title="查看最近的提交内容"></a>查看最近的提交内容</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">show</span>          #最近一次</div><div class="line">git <span class="keyword">show</span> <span class="keyword">HEAD</span>^    #往前推一次,等于git <span class="keyword">show</span> <span class="keyword">HEAD</span>~<span class="number">1</span> </div><div class="line">git <span class="keyword">show</span> <span class="keyword">HEAD</span>^^   #往前推两次,等于git <span class="keyword">show</span> <span class="keyword">HEAD</span>~<span class="number">2</span></div></pre></td></tr></table></figure>
-<p><strong>找到规律的同学应该知道怎么看更早之前的记录了</strong></p>
-<h2 id="一次加入所有修改，包括delete"><a href="#一次加入所有修改，包括delete" class="headerlink" title="一次加入所有修改，包括delete"></a>一次加入所有修改，包括delete</h2><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">add</span><span class="bash"> -u         <span class="comment">#一次加入所有被修改的内容，包含 modified 及 deleted</span></span></div><div class="line"><span class="bash">git add --update   <span class="comment">#同上</span></span></div></pre></td></tr></table></figure>
-<h2 id="移动文件或重命名"><a href="#移动文件或重命名" class="headerlink" title="移动文件或重命名"></a>移动文件或重命名</h2><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git mv my_folder/numbers<span class="selector-class">.txt</span> .   #将my_folder/numbers.txt文件移动到当前目录,文件名不变</div><div class="line">git mv numbers<span class="selector-class">.txt</span> num<span class="selector-class">.txt</span>        #修改文件名</div></pre></td></tr></table></figure>
-<h2 id="Git将”尚未被提交”的内容分成三种类型，分別是"><a href="#Git将”尚未被提交”的内容分成三种类型，分別是" class="headerlink" title="Git将”尚未被提交”的内容分成三种类型，分別是"></a>Git将”尚未被提交”的内容分成三种类型，分別是</h2><ul>
-<li>Changes to be committed（将要提交的内容）</li>
-<li>Changes not staged for commit（被修改但未提交）</li>
-<li>Untracked files（没有如版本库的文件）</li>
+    <content type="html"><![CDATA[<h2 id="查询数据库所占空间大小"><a href="#查询数据库所占空间大小" class="headerlink" title="查询数据库所占空间大小"></a>查询数据库所占空间大小</h2><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="built_in">sum</span>(DATA_LENGTH)+<span class="built_in">sum</span>(INDEX_LENGTH) <span class="keyword">FROM</span> information_schema.TABLES <span class="keyword">WHERE</span> D</div></pre></td></tr></table></figure>
+<p>得到的结果是单位是字节Byte</p>
+<h2 id="查询数据库中所有表所占空间的大小"><a href="#查询数据库中所有表所占空间的大小" class="headerlink" title="查询数据库中所有表所占空间的大小"></a>查询数据库中所有表所占空间的大小</h2><a id="more"></a>
+<p>在数据库的中的<strong>information_schema</strong>数据库中有一个 TABLES 表，这个表主要字段分别是：</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TABLE_SCHEMA</td>
+<td>数据库名</td>
+</tr>
+<tr>
+<td>TABLE_NAME</td>
+<td>表名</td>
+</tr>
+<tr>
+<td>ENGINE</td>
+<td>所使用的存储引擎</td>
+</tr>
+<tr>
+<td>TABLES_ROWS</td>
+<td>记录数</td>
+</tr>
+<tr>
+<td>DATA_LENGTH</td>
+<td>数据大小</td>
+</tr>
+<tr>
+<td>INDEX_LENGTH</td>
+<td>索引大小</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>查询所有表数据和索引的的大小</li>
 </ul>
-<h2 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h2><ol>
-<li>变回未修改状态</li>
-</ol>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git checkout <span class="comment">-- &lt;file&gt;</span></div></pre></td></tr></table></figure>
-<ol>
-<li>回到未提交状态</li>
-</ol>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">reset</span> <span class="keyword">HEAD</span> &lt;<span class="keyword">file</span>&gt;</div></pre></td></tr></table></figure>
-<h2 id="回到指定版本"><a href="#回到指定版本" class="headerlink" title="回到指定版本"></a>回到指定版本</h2><figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git <span class="built_in">log</span> --oneline  #显示<span class="built_in">log</span>日志，但只显示commit id和提交描述</div><div class="line"></div><div class="line">a2ba80 First commit</div><div class="line"><span class="number">80635e7</span> 增加<span class="built_in">index</span>.html文件</div><div class="line">c65ef5e Create README.md</div></pre></td></tr></table></figure>
-<p>选择commit id 使用下述命令回到指定版本</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">reset</span> <span class="comment">--hard 5a2ba80</span></div></pre></td></tr></table></figure>
-<h2 id="查看git历史修改记录"><a href="#查看git历史修改记录" class="headerlink" title="查看git历史修改记录"></a>查看git历史修改记录</h2><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git reflog                                    <span class="comment">#查看所有记录</span></div><div class="line">80635e7 HEAD<span class="meta">@&#123;2&#125;:</span> commit: 增加index.html文件   <span class="comment">#三列;1是commit id;2是short name;3是描述</span></div><div class="line">git show <span class="variable">&lt;commit id&gt;</span>                          <span class="comment">#查看指定记录</span></div><div class="line">git show <span class="variable">&lt;short name&gt;</span>                         <span class="comment">#同上</span></div></pre></td></tr></table></figure>
-<h2 id="修改提交说明信息-慎用"><a href="#修改提交说明信息-慎用" class="headerlink" title="修改提交说明信息(慎用)"></a>修改提交说明信息(慎用)</h2><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">git </span><span class="string">commit </span><span class="built_in">--amend</span>               <span class="comment">#使用后进入 vim 编辑,保存后即可</span></div><div class="line"><span class="string">git </span><span class="string">commit </span><span class="built_in">--amend</span> -m &lt;<span class="string">message&gt;</span>  <span class="comment">#直接编辑提交说明</span></div></pre></td></tr></table></figure>
-<h2 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h2><h3 id="创建并删除分支"><a href="#创建并删除分支" class="headerlink" title="创建并删除分支"></a>创建并删除分支</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">branch </span>develop</div><div class="line">git checkout -<span class="keyword">b </span>&lt;new <span class="keyword">branch </span>name&gt;  <span class="comment">#建立分支并切换到该分支</span></div><div class="line">git <span class="keyword">branch </span>-f &lt;new <span class="keyword">branch </span>name&gt; &lt;commit id&gt; <span class="comment">#在指定版本上建立分支</span></div><div class="line">git <span class="keyword">branch </span>-D &lt;<span class="keyword">branch </span>name&gt; <span class="comment">#删除分支</span></div></pre></td></tr></table></figure>
-<h3 id="修改远程分支名称"><a href="#修改远程分支名称" class="headerlink" title="修改远程分支名称"></a>修改远程分支名称</h3><p>一般来说，我们主要的分支都是origin，但其实这个名字是可以改的<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git remote <span class="built_in">rename</span> <span class="built_in">origin</span> github</div></pre></td></tr></table></figure></p>
-<h3 id="上传分支需改"><a href="#上传分支需改" class="headerlink" title="上传分支需改"></a>上传分支需改</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push &lt;remote <span class="built_in">name</span>&gt; &lt;branch <span class="built_in">name</span>&gt;</div></pre></td></tr></table></figure>
-<h3 id="删除远端分支"><a href="#删除远端分支" class="headerlink" title="删除远端分支"></a>删除远端分支</h3><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push &lt;remote <span class="built_in">name</span>&gt; :&lt;branch <span class="built_in">name</span>&gt;</div></pre></td></tr></table></figure>
-<h3 id="查看分支"><a href="#查看分支" class="headerlink" title="查看分支"></a>查看分支</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">branch </span>       <span class="comment">#只看本地分支</span></div><div class="line">git <span class="keyword">branch </span>-a     <span class="comment">#查看本地及远程分支</span></div></pre></td></tr></table></figure>
-<h2 id="版本暂存"><a href="#版本暂存" class="headerlink" title="版本暂存"></a>版本暂存</h2><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">git stash   <span class="comment">#暂存目前修改的内容</span></div><div class="line">git stash list <span class="comment"># 列出所有暂存的内容</span></div><div class="line">git show stash@&#123;0&#125; <span class="comment">#显示暂存内容的详情</span></div><div class="line">git stash <span class="keyword">pop</span>  <span class="comment">#取出最近一次暂存的内容</span></div><div class="line">git stash <span class="keyword">pop</span> stash@&#123;n&#125; <span class="comment">#取出指定的暂存内容</span></div><div class="line">git stash drop <span class="comment">#删除暂存的内容</span></div><div class="line">git stash drop stash@&#123;n&#125;  <span class="comment">#删除指定的暂存内容</span></div><div class="line">git stash clear <span class="comment">#清空暂存区</span></div></pre></td></tr></table></figure>
-<h2 id="子模块"><a href="#子模块" class="headerlink" title="子模块"></a>子模块</h2><h3 id="添加子模块"><a href="#添加子模块" class="headerlink" title="添加子模块"></a>添加子模块</h3><p>如果我们用到外部依赖的库的时候，通常需要使用子模块来实现</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">submodule </span><span class="keyword">add </span>git@github.com:<span class="keyword">jquery/jquery.git </span><span class="keyword">jquery </span> <span class="comment">#添加jquery作为子模块</span></div></pre></td></tr></table></figure>
-<h3 id="初始化子模块"><a href="#初始化子模块" class="headerlink" title="初始化子模块"></a>初始化子模块</h3><p>使用子模块的项目在clone出新的项目后，必须初始化子模块内容<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">git</span> <span class="keyword">submodule </span>init</div><div class="line"><span class="symbol">git</span> <span class="keyword">submodule </span>update</div></pre></td></tr></table></figure></p>
-<p>在clone的时候加上<strong>--recursive</strong>可以直接完成子模块的初始化<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git <span class="keyword">clone</span> <span class="title">--recursive</span> git@github.com:zlargon/git-test.git</div></pre></td></tr></table></figure></p>
-<hr>
-<p><strong>字数限制？往后无法添加内容</strong></p>
-]]></content>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> TABLE_NAME,DATA_LENGTH+INDEX_LENGTH,TABLE_ROWS <span class="keyword">FROM</span> information_schema.TABLES <span class="keyword">WHERE</span> TABLE_SCHEMA=<span class="string">"数据库名"</span>;</div></pre></td></tr></table></figure>
+<ul>
+<li>查询某个表的数据大小和索引大小</li>
+</ul>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SELECT TABLE_NAME,DATA_LENGTH+INDEX_LENGTH,TABLE_ROWS <span class="keyword">FROM</span> information_schema.TABLES WHERE <span class="attribute">TABLE_SCHEMA</span>=<span class="string">"数据库名"</span> <span class="keyword">AND</span> <span class="attribute">TABLE_NAME</span>=<span class="string">"表名"</span>;</div></pre></td></tr></table></figure>]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; title=&quot;说明&quot;&gt;&lt;/a&gt;说明&lt;/h2&gt;&lt;p&gt;此文件是为了留底，找时间排查原因，在增加内容就无法渲染的问题&lt;br&gt;并且上个blog不知是什么原因，再多加代码段就会报错。&lt;/p&gt;
-&lt;h2 id=&quot;git设置颜色高亮显示&quot;&gt;&lt;a href=&quot;#git设置颜色高亮显示&quot; class=&quot;headerlink&quot; title=&quot;git设置颜色高亮显示&quot;&gt;&lt;/a&gt;git设置颜色高亮显示&lt;/h2&gt;&lt;figure class=&quot;highlight routeros&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;git&lt;span class=&quot;built_in&quot;&gt; config &lt;/span&gt;--global  color.ui &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;git-命令别名设置&quot;&gt;&lt;a href=&quot;#git-命令别名设置&quot; class=&quot;headerlink&quot; title=&quot;git 命令别名设置&quot;&gt;&lt;/a&gt;git 命令别名设置&lt;/h2&gt;&lt;figure class=&quot;highlight routeros&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;git&lt;span class=&quot;built_in&quot;&gt; config &lt;/span&gt;--global  alias.br   branch&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+      &lt;h2 id=&quot;查询数据库所占空间大小&quot;&gt;&lt;a href=&quot;#查询数据库所占空间大小&quot; class=&quot;headerlink&quot; title=&quot;查询数据库所占空间大小&quot;&gt;&lt;/a&gt;查询数据库所占空间大小&lt;/h2&gt;&lt;figure class=&quot;highlight n1ql&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;sum&lt;/span&gt;(DATA_LENGTH)+&lt;span class=&quot;built_in&quot;&gt;sum&lt;/span&gt;(INDEX_LENGTH) &lt;span class=&quot;keyword&quot;&gt;FROM&lt;/span&gt; information_schema.TABLES &lt;span class=&quot;keyword&quot;&gt;WHERE&lt;/span&gt; D&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;得到的结果是单位是字节Byte&lt;/p&gt;
+&lt;h2 id=&quot;查询数据库中所有表所占空间的大小&quot;&gt;&lt;a href=&quot;#查询数据库中所有表所占空间的大小&quot; class=&quot;headerlink&quot; title=&quot;查询数据库中所有表所占空间的大小&quot;&gt;&lt;/a&gt;查询数据库中所有表所占空间的大小&lt;/h2&gt;
     
     </summary>
     
+      <category term="mysql" scheme="http://yoursite.com/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
