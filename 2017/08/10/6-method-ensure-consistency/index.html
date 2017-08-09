@@ -92,13 +92,13 @@
 
 
 
-<meta name="description" content="来自：@高可用架构​​​​原文链接：http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0  编者按：本文由「高可用架构后花园」群讨论整理而成。有人的地方，就有江湖有江湖的地方，就有纷争  问题的起源在电商等业务中，系统一般由多个独立的服务组成，如何解决分布式调用时候数据的一致性？  具体业务场景如下，比如一个业务操作，如果同时">
+<meta name="description" content="来自：@高可用架构​​​​原文链接：http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0  编者按：本文由「高可用架构后花园」群讨论整理而成。有人的地方，就有江湖有江湖的地方，就有纷争">
 <meta name="keywords" content="分布式系统,一致性">
 <meta property="og:type" content="article">
 <meta property="og:title" content="保证分布式系统数据一致性的6种方案">
 <meta property="og:url" content="http://yoursite.com/2017/08/10/6-method-ensure-consistency/index.html">
 <meta property="og:site_name" content="musezhang的一亩三分地">
-<meta property="og:description" content="来自：@高可用架构​​​​原文链接：http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0  编者按：本文由「高可用架构后花园」群讨论整理而成。有人的地方，就有江湖有江湖的地方，就有纷争  问题的起源在电商等业务中，系统一般由多个独立的服务组成，如何解决分布式调用时候数据的一致性？  具体业务场景如下，比如一个业务操作，如果同时">
+<meta property="og:description" content="来自：@高可用架构​​​​原文链接：http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0  编者按：本文由「高可用架构后花园」群讨论整理而成。有人的地方，就有江湖有江湖的地方，就有纷争">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/006kbv1Jgw1f31xaggg0bj30cq09mq3h.jpg">
 <meta property="og:image" content="https://ww4.sinaimg.cn/large/006kbv1Jgw1f31xaq6ex2j30ct082wev.jpg">
@@ -109,10 +109,10 @@
 <meta property="og:image" content="https://ww3.sinaimg.cn/large/006kbv1Jgw1f31xgmb4wrj30hl09rgmn.jpg">
 <meta property="og:image" content="https://ww1.sinaimg.cn/large/006kbv1Jgw1f31xhl94fyj30hu08qt9j.jpg">
 <meta property="og:image" content="http://weibo.com/archnotes">
-<meta property="og:updated_time" content="2017-08-09T16:54:25.000Z">
+<meta property="og:updated_time" content="2017-08-09T16:56:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="保证分布式系统数据一致性的6种方案">
-<meta name="twitter:description" content="来自：@高可用架构​​​​原文链接：http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0  编者按：本文由「高可用架构后花园」群讨论整理而成。有人的地方，就有江湖有江湖的地方，就有纷争  问题的起源在电商等业务中，系统一般由多个独立的服务组成，如何解决分布式调用时候数据的一致性？  具体业务场景如下，比如一个业务操作，如果同时">
+<meta name="twitter:description" content="来自：@高可用架构​​​​原文链接：http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0  编者按：本文由「高可用架构后花园」群讨论整理而成。有人的地方，就有江湖有江湖的地方，就有纷争">
 <meta name="twitter:image" content="https://ww1.sinaimg.cn/large/006kbv1Jgw1f31xaggg0bj30cq09mq3h.jpg">
 
 
@@ -419,6 +419,7 @@
 <blockquote>
 <p>编者按：本文由「高可用架构后花园」群讨论整理而成。<br>有人的地方，就有江湖<br>有江湖的地方，就有纷争</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="问题的起源"><a href="#问题的起源" class="headerlink" title="问题的起源"></a>问题的起源</h2><p>在电商等业务中，系统一般由多个独立的服务组成，如何解决分布式调用时候数据的一致性？ </p>
 <p>具体业务场景如下，比如一个业务操作，如果同时调用服务 A、B、C，需要满足要么同时成功；要么同时失败。A、B、C 可能是多个不同部门开发、部署在不同服务器上的远程服务。</p>
 <p>在分布式系统来说，如果不想牺牲一致性，CAP 理论告诉我们只能放弃可用性，这显然不能接受。为了便于讨论问题，先简单介绍下数据一致性的基础理论。</p>

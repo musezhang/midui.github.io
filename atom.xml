@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-09T16:54:25.000Z</updated>
+  <updated>2017-08-09T16:56:24.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,12 +20,13 @@
     <link href="http://yoursite.com/2017/08/10/6-method-ensure-consistency/"/>
     <id>http://yoursite.com/2017/08/10/6-method-ensure-consistency/</id>
     <published>2017-08-09T16:24:39.000Z</published>
-    <updated>2017-08-09T16:54:25.000Z</updated>
+    <updated>2017-08-09T16:56:24.000Z</updated>
     
     <content type="html"><![CDATA[<p>来自：<a href="http://weibo.com/archnotes" target="_blank" rel="external">@高可用架构</a>​​​​<br>原文链接：<a href="http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0" target="_blank" rel="external">http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0</a></p>
 <blockquote>
 <p>编者按：本文由「高可用架构后花园」群讨论整理而成。<br>有人的地方，就有江湖<br>有江湖的地方，就有纷争</p>
 </blockquote>
+<a id="more"></a>
 <h2 id="问题的起源"><a href="#问题的起源" class="headerlink" title="问题的起源"></a>问题的起源</h2><p>在电商等业务中，系统一般由多个独立的服务组成，如何解决分布式调用时候数据的一致性？ </p>
 <p>具体业务场景如下，比如一个业务操作，如果同时调用服务 A、B、C，需要满足要么同时成功；要么同时失败。A、B、C 可能是多个不同部门开发、部署在不同服务器上的远程服务。</p>
 <p>在分布式系统来说，如果不想牺牲一致性，CAP 理论告诉我们只能放弃可用性，这显然不能接受。为了便于讨论问题，先简单介绍下数据一致性的基础理论。</p>
@@ -146,7 +147,10 @@
     
     <summary type="html">
     
-      &lt;p&gt;来自：&lt;a href=&quot;http://weibo.com/archnotes&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;@高可用架构&lt;/a&gt;​​​​&lt;br&gt;原文链接：&lt;a href=&quot;http://weibo.com/ttarticle/p/show?
+      &lt;p&gt;来自：&lt;a href=&quot;http://weibo.com/archnotes&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;@高可用架构&lt;/a&gt;​​​​&lt;br&gt;原文链接：&lt;a href=&quot;http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://weibo.com/ttarticle/p/show?id=2309403965965003062676#_0&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;编者按：本文由「高可用架构后花园」群讨论整理而成。&lt;br&gt;有人的地方，就有江湖&lt;br&gt;有江湖的地方，就有纷争&lt;/p&gt;
+&lt;/blockquote&gt;
     
     </summary>
     
