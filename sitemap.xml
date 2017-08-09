@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/08/10/6-method-ensure-consistency/</loc>
+    
+    <lastmod>2017-08-09T16:54:25.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/08/08/mysql-space-used/</loc>
     
     <lastmod>2017-08-09T15:23:33.000Z</lastmod>
