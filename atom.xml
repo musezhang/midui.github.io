@@ -168,7 +168,7 @@
     <link href="http://yoursite.com/2017/08/08/mysql-space-used/"/>
     <id>http://yoursite.com/2017/08/08/mysql-space-used/</id>
     <published>2017-08-08T15:50:00.000Z</published>
-    <updated>2017-08-09T15:23:33.000Z</updated>
+    <updated>2017-08-10T09:48:54.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="查询数据库所占空间大小"><a href="#查询数据库所占空间大小" class="headerlink" title="查询数据库所占空间大小"></a>查询数据库所占空间大小</h2><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> <span class="built_in">sum</span>(DATA_LENGTH)+<span class="built_in">sum</span>(INDEX_LENGTH) <span class="keyword">FROM</span> information_schema.TABLES <span class="keyword">WHERE</span> D</div></pre></td></tr></table></figure>
 <p>得到的结果是单位是字节Byte</p>
