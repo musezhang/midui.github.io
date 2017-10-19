@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="mysql,数据库,查询缓存," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="起因起因是近期，集客中的数据又出现了查询极慢的情况。单表1100W数据,在进行count(*)查询的时候,查询性能极差，按照特定条件的查询(已加索引)，查询出月500W数据的时候，大约耗时18s多。可能解决方案:  存储引擎修改 查询语句优化 离线预查(此方案结合业务场景)详见此文：[mysql千万级数据count性能优化]  在解决的过程中顺道看了下查询缓存的问题，线上库竟然没有开启查询缓存。特">
+<meta name="keywords" content="mysql,数据库,查询缓存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库查询缓存">
+<meta property="og:url" content="http://yoursite.com/2017/10/20/mysql-query-cache/index.html">
+<meta property="og:site_name" content="musezhang的一亩三分地">
+<meta property="og:description" content="起因起因是近期，集客中的数据又出现了查询极慢的情况。单表1100W数据,在进行count(*)查询的时候,查询性能极差，按照特定条件的查询(已加索引)，查询出月500W数据的时候，大约耗时18s多。可能解决方案:  存储引擎修改 查询语句优化 离线预查(此方案结合业务场景)详见此文：[mysql千万级数据count性能优化]  在解决的过程中顺道看了下查询缓存的问题，线上库竟然没有开启查询缓存。特">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-19T18:41:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据库查询缓存">
+<meta name="twitter:description" content="起因起因是近期，集客中的数据又出现了查询极慢的情况。单表1100W数据,在进行count(*)查询的时候,查询性能极差，按照特定条件的查询(已加索引)，查询出月500W数据的时候，大约耗时18s多。可能解决方案:  存储引擎修改 查询语句优化 离线预查(此方案结合业务场景)详见此文：[mysql千万级数据count性能优化]  在解决的过程中顺道看了下查询缓存的问题，线上库竟然没有开启查询缓存。特">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/20/mysql-query-cache/"/>
+
+
+
+
+
+  <title>数据库查询缓存 | musezhang的一亩三分地</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?de2cae3f9dd86886f107642df2863b1d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">musezhang的一亩三分地</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/20/mysql-query-cache/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="muse zhang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="musezhang的一亩三分地">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据库查询缓存</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-20T01:31:34+08:00">
+                2017-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  853
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>起因是近期，集客中的数据又出现了查询极慢的情况。单表1100W数据,在进行count(*)查询的时候,查询性能极差，按照特定条件的查询(已加索引)，查询出月500W数据的时候，大约耗时18s多。<br>可能解决方案:</p>
+<ol>
+<li>存储引擎修改</li>
+<li>查询语句优化</li>
+<li>离线预查(此方案结合业务场景)<br>详见此文：[mysql千万级数据count性能优化]</li>
+</ol>
+<p>在解决的过程中顺道看了下查询缓存的问题，线上库竟然没有开启查询缓存。特此做了些记录。<br><a id="more"></a></p>
+<h2 id="查询缓存原理"><a href="#查询缓存原理" class="headerlink" title="查询缓存原理"></a>查询缓存原理</h2><h3 id="查询缓存的实现原理"><a href="#查询缓存的实现原理" class="headerlink" title="查询缓存的实现原理"></a>查询缓存的实现原理</h3><h3 id="查询缓存的写入与过期"><a href="#查询缓存的写入与过期" class="headerlink" title="查询缓存的写入与过期"></a>查询缓存的写入与过期</h3><h2 id="查询缓存相关参数说明"><a href="#查询缓存相关参数说明" class="headerlink" title="查询缓存相关参数说明"></a>查询缓存相关参数说明</h2><h3 id="查询缓存参数"><a href="#查询缓存参数" class="headerlink" title="查询缓存参数"></a>查询缓存参数</h3><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show status like “%Qcache%”;</div><div class="line"></div><div class="line">+-------------------------+---------+</div><div class="line">|<span class="string"> Variable_name           </span>|<span class="string"> Value   </span>|</div><div class="line">+-------------------------+---------+</div><div class="line">|<span class="string"> Qcache_free_blocks      </span>|<span class="string"> 1639    </span>|</div><div class="line">|<span class="string"> Qcache_free_memory      </span>|<span class="string"> 5579448 </span>|</div><div class="line">|<span class="string"> Qcache_hits             </span>|<span class="string"> 1464051 </span>|</div><div class="line">|<span class="string"> Qcache_inserts          </span>|<span class="string"> 2442792 </span>|</div><div class="line">|<span class="string"> Qcache_lowmem_prunes    </span>|<span class="string"> 1910628 </span>|</div><div class="line">|<span class="string"> Qcache_not_cached       </span>|<span class="string"> 447381  </span>|</div><div class="line">|<span class="string"> Qcache_queries_in_cache </span>|<span class="string"> 8707    </span>|</div><div class="line">|<span class="string"> Qcache_total_blocks     </span>|<span class="string"> 19402   </span>|</div><div class="line">+-------------------------+---------+</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>变量名称</th>
+<th>中文</th>
+<th>英文</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qcache_free_blocks</td>
+<td>查询缓存中空闲内存块数量</td>
+<td>The number of free memory blocks in the query cache</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_free_memory</td>
+<td>查询缓存中空闲内存大小</td>
+<td>The amount of free memory for the query cache.</td>
+<td>单位B</td>
+</tr>
+<tr>
+<td>Qcache_hits</td>
+<td>查询缓存命中数</td>
+<td>The number of query cache hits</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_inserts</td>
+<td>加入查询缓存的语句数量</td>
+<td>The number of queries added to the query cache.</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_lowmem_prunes</td>
+<td>由于内存不足删除的查询语句数</td>
+<td>The number of queries that were deleted from the query cache because of low memory</td>
+<td>这个数字的持续增长说明内存不足或碎片严重</td>
+</tr>
+<tr>
+<td>Qcache_not_cached</td>
+<td>没有被缓存的查询语句数</td>
+<td>The number of noncached queries</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_queries_in_cache</td>
+<td>查询缓存中的语句数</td>
+<td>The number of queries registered in the query cache</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_total_blocks</td>
+<td>查询缓存的块数</td>
+<td>The total number of blocks in the query cache</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注：所有上述参数都已经在mysql5.7.20弃用,在8.0删除,使用时，请确认mysql版本</strong></p>
+<h3 id="查询缓存配置参数"><a href="#查询缓存配置参数" class="headerlink" title="查询缓存配置参数"></a>查询缓存配置参数</h3><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="emphasis">'query_cache%'</span>;</div><div class="line"><span class="code">+------------------------------+</span>----------+</div><div class="line">| Variable<span class="emphasis">_name                | Value    |</span></div><div class="line"><span class="emphasis">+------------------------------+----------+</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_limit            | 1048576  |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_min_</span>res<span class="emphasis">_unit     | 4096     |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_size             | 16777216 |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_type             | ON       |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_wlock_</span>invalidate | OFF      |</div><div class="line"><span class="code">+------------------------------+</span>----------+</div><div class="line">5 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>变量名称</th>
+<th>中文</th>
+<th>英文</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>query_cache_limit</td>
+<td>查询结果最大限制，大于这个值的不缓存</td>
+<td>Do not cache results that are larger than this number of bytes. The default value is 1MB.</td>
+<td>默认1MB</td>
+</tr>
+<tr>
+<td>query_cache_min_res_unit</td>
+<td>查询缓存中分配的块的最小大小</td>
+<td>The minimum size (in bytes) for blocks allocated by the query cache</td>
+<td>字节为单位，默认4096B</td>
+</tr>
+<tr>
+<td>query_cache_size</td>
+<td>用于缓存查询结果的缓存大小</td>
+<td>The amount of memory allocated for caching query results.</td>
+<td>默认1M</td>
+</tr>
+<tr>
+<td>query_cache_type</td>
+<td>查询缓存的类型0/OFF：不进行查询缓存；1：缓存除SELECT SQL_NO_CACHE开头的所有可缓存查询结果；2：值缓存以SELECT SQL_CACHE开头的可缓存查询</td>
+<td>Set the query cache type</td>
+<td>默认OFF,如果选择OFF，并不会清空查询缓存大小，如果需要，需设置query_cache_size=0</td>
+</tr>
+<tr>
+<td>query_cache_wlock_invalidate</td>
+<td>针对MyISAM引擎表，对表的请求进行限制</td>
+<td>Normally, when one client acquires a WRITE lock on a MyISAM table, other clients are not blocked from issuing statements that read from the table if the query results are present in the query cache. Setting this variable to 1 causes acquisition of a WRITE lock for a table to invalidate any queries in the query cache that refer to the table. This forces other clients that attempt to access the table to wait while the lock is in effect</td>
+<td>具体解释参见官方说明</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注：所有上述参数都已经在mysql5.7.20弃用,在8.0删除,使用时，请确认mysql版本</strong></p>
+<h2 id="参考文件"><a href="#参考文件" class="headerlink" title="参考文件"></a>参考文件</h2><ol>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/server-status-variables.html" target="_blank" rel="external">5.1.7 Server Status Variables</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html" target="_blank" rel="external">5.1.5 Server System Variables</a></li>
+<li><a href="http://database.51cto.com/art/201010/229956.htm" target="_blank" rel="external">MySQL查询缓存变量</a></li>
+<li><a href="https://www.oschina.net/question/554525_132387" target="_blank" rel="external">MYSQL会把查询的结果缓存多久?一个考验人的技术问题</a></li>
+<li><a href="/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/">[译文]mysql8.0:退出对查询缓存的支持</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/查询缓存/" rel="tag"># 查询缓存</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/23/design-patterns-singleton/" rel="next" title="单例模式">
+                <i class="fa fa-chevron-left"></i> 单例模式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/" rel="prev" title="【译文】mysql8.0:退出对查询缓存的支持">
+                【译文】mysql8.0:退出对查询缓存的支持 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg"
+               alt="muse zhang" />
+          <p class="site-author-name" itemprop="name">muse zhang</p>
+           
+              <p class="site-description motion-element" itemprop="description">To do something</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/musezhang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1673800462" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询缓存原理"><span class="nav-number">2.</span> <span class="nav-text">查询缓存原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存的实现原理"><span class="nav-number">2.1.</span> <span class="nav-text">查询缓存的实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存的写入与过期"><span class="nav-number">2.2.</span> <span class="nav-text">查询缓存的写入与过期</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查询缓存相关参数说明"><span class="nav-number">3.</span> <span class="nav-text">查询缓存相关参数说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存参数"><span class="nav-number">3.1.</span> <span class="nav-text">查询缓存参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存配置参数"><span class="nav-number">3.2.</span> <span class="nav-text">查询缓存配置参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文件"><span class="nav-number">4.</span> <span class="nav-text">参考文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">muse zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

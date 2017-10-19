@@ -2,6 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/</loc>
+    
+    <lastmod>2017-10-19T19:41:15.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/10/20/mysql-query-cache/</loc>
+    
+    <lastmod>2017-10-19T18:41:27.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/09/23/design-patterns-singleton/</loc>
+    
+    <lastmod>2017-09-24T17:26:28.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/08/26/five-design-patterns/</loc>
+    
+    <lastmod>2017-09-23T09:00:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/08/26/design-patterns-Factory/</loc>
+    
+    <lastmod>2017-08-26T03:33:32.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/08/17/forget-mysql-password/</loc>
     
     <lastmod>2017-08-17T06:13:24.000Z</lastmod>

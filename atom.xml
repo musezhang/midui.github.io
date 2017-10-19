@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-08-17T06:13:24.000Z</updated>
+  <updated>2017-10-19T19:41:15.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,331 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【译文】mysql8.0:退出对查询缓存的支持</title>
+    <link href="http://yoursite.com/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/"/>
+    <id>http://yoursite.com/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/</id>
+    <published>2017-10-19T18:37:37.000Z</published>
+    <updated>2017-10-19T19:41:15.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong><em>原文链接：<a href="http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/" target="_blank" rel="external">http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/</a></em></strong></p>
+<p><strong><em>Author:Morgan Tocker(the Product Manager for the MySQL Server)</em></strong></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>正如Rene昨天在<a href="http://proxysql.com/blog/scaling-with-proxysql-query-cache" target="_blank" rel="external">ProxySQL</a>博客上写道：</p>
+<blockquote>
+<p>尽管MySQL查询缓存旨在提高性能，但它具有严重的可扩展性问题，并且很容易成为严重的瓶颈。</p>
+</blockquote>
+<p>这确实是我们在MySQL团队观察一段时间后得到的结论。在我们了解今天的文章之前，让我先来介绍一下查询缓存。</p>
+<h2 id="查询缓存简介"><a href="#查询缓存简介" class="headerlink" title="查询缓存简介"></a>查询缓存简介</h2><p>MySQL查询缓存是查询结果缓存。他会将以<strong>SEL</strong>开头的查询语句与一个散列表进行比较，如果有匹配则返回上一次执行查询的结果。这里还有一些限制：</p>
+<ul>
+<li>查询必须匹配字节级的匹配（查询缓存避免解析）</li>
+<li>使用<a href="https://dev.mysql.com/doc/refman/5.7/en/query-cache-operation.html" target="_blank" rel="external">非确定性特征</a>将导致查询不被缓存（包括临时表，用户变量，RAND（），NOW（）和UDF））</li>
+<li>查询缓存旨在不提供过时的结果。对基础表的任何修改都会导致所有缓存对于这些表无效。</li>
+<li>如果缓存用在InnoDB引擎中，会有一些限制（对于MVCC，因为您打开了一个事务，“缓存”可能不会得到用户预期中的数据）</li>
+</ul>
+<h2 id="最佳案例"><a href="#最佳案例" class="headerlink" title="最佳案例"></a>最佳案例</h2><p>正如我几年前在个人博客上写的：</p>
+<blockquote>
+<p>查询缓存的理想使用场景往往在很大程度上是只读的，这个场景下，通过非常大的代价去检查数百万行数据，但是指返回很少的结果 一个假设出的例子是可能有一个复杂的查询来得到一个网页上的表单中的下拉列表的值，在这种情况下，查询缓存可以掩盖由于缺少的索引引起的查询性能问题，这对新手用户有帮助。</p>
+</blockquote>
+<p>这个观点在今天仍然适用，但是我认为重要的是还要指出，我们现在已经有很多DBA工具的对这些性能有所改善：</p>
+<ul>
+<li>在MySQL服务器中，我们现在可以重写查询以插入提示（或通过其他修改来提高性能）</li>
+<li>我们有如ProxySQL这样的第三方工具，可以充当中间人查询缓存。 ProxySQL还支持缓存的TTL，它在我之前提供的示例中可以正常工作（构建下拉列表的值列表）。</li>
+</ul>
+<h2 id="查询缓存的限制"><a href="#查询缓存的限制" class="headerlink" title="查询缓存的限制"></a>查询缓存的限制</h2><p>自从MySQL 5.6（2013）以来，查询缓存已被禁用，因为它已知在多核机器上不能与高吞吐量工作负载的规模相比较。 Rene昨天在他的帖子中证实了这一点，而且这个问题之前也曾被<a href="https://www.flamingspork.com/blog/2014/06/05/performance-impact-of-mysql-query-cache-on-modern-hardware/" target="_blank" rel="external">Stewart Smith</a>和<a href="https://dom.as/tech/query-cache-tuner/" target="_blank" rel="external">Domas Mituzas</a>（更新：<a href="http://blog.koehntopp.info/index.php/1844-good-riddance-to-the-query-cache/" target="_blank" rel="external">Kristian Koehntopp</a>）提及。</p>
+<p>假设可扩展性可以提高，查询缓存的限制因素在于，只有查询命中了的缓存才能看到改进; 它不太可能提高性能的可预测性。 对于面向用户的系统，降低性能的可变性通常比提高峰值吞吐量更重要：<br><img src="http://mysqlserverteam.com/wp-content/uploads/2017/05/Predictability-SIGMOD2017-768x576.jpg" alt="现有DBMS系统性能的预测"><br><img src="http://mysqlserverteam.com/wp-content/uploads/2017/05/Predictability-SIGMOD2017-2-768x576.jpg" alt="为什么性能可预测性很重要"><br><strong><em>[\</em>数据来源](<a href="http://web.eecs.umich.edu/~mozafari/php/data/uploads/Predictability-SIGMOD2017.pdf)*" target="_blank" rel="external">http://web.eecs.umich.edu/~mozafari/php/data/uploads/Predictability-SIGMOD2017.pdf)*</a></strong></p>
+<h2 id="决定删除对查询缓存的支持"><a href="#决定删除对查询缓存的支持" class="headerlink" title="决定删除对查询缓存的支持"></a>决定删除对查询缓存的支持</h2><p>我们赞同University of Michigan, Ann Arbor大学的Jiamin Huang，Barzan Mozafari，Grant Schoenebeck，Thomas F. Wenisch的<a href="https://web.eecs.umich.edu/~mozafari/php/data/uploads/sigmod_2017_predictability.pdf" target="_blank" rel="external">研究成果</a>。 我们考虑了两种方案：一个是我们可以对查询缓存进行哪些改进的方案，另一个是我们可以做出哪些改进，从而为所有工作负载提供改进。</p>
+<p>虽然这些选择本身是正交的，但工程资源是有限的。也就是说，我们要改变战略，去把资源投资到能够普遍适用于所有工作负载的改进上来。</p>
+<p>我们也同意<a href="http://proxysql.com/blog/scaling-with-proxysql-query-cache" target="_blank" rel="external">Rene的结论</a>，即缓存在靠近客户端时提供了最大的好处<br><img src="http://mysqlserverteam.com/wp-content/uploads/2017/05/QC2.png" alt="缓存性能的表现"><br><strong><em>将缓存移到客户端时，“Client + 2x ProxySQL”结果显示性能提升了5.2倍。</em></strong></p>
+<h2 id="现有用户的升级路径"><a href="#现有用户的升级路径" class="headerlink" title="现有用户的升级路径"></a>现有用户的升级路径</h2><p>根据当前的提示说明，查询缓存在MySQL 5.7一下版本仍然会继续得到支持。 但MySQL 8.0不再支持查询缓存，用户升级将被鼓励使用服务器端查询重写或ProxySQL作为中间缓存</p>
+<p>我们预计这种变化只会影响到少数用户，但如果您关心此问题，请联系并联系！</p>
+<p>感谢您使用MySQL！！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;原文链接：&lt;a href=&quot;http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://yoursite.com/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="查询缓存" scheme="http://yoursite.com/tags/%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>数据库查询缓存</title>
+    <link href="http://yoursite.com/2017/10/20/mysql-query-cache/"/>
+    <id>http://yoursite.com/2017/10/20/mysql-query-cache/</id>
+    <published>2017-10-19T17:31:34.000Z</published>
+    <updated>2017-10-19T18:41:27.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>起因是近期，集客中的数据又出现了查询极慢的情况。单表1100W数据,在进行count(*)查询的时候,查询性能极差，按照特定条件的查询(已加索引)，查询出月500W数据的时候，大约耗时18s多。<br>可能解决方案:</p>
+<ol>
+<li>存储引擎修改</li>
+<li>查询语句优化</li>
+<li>离线预查(此方案结合业务场景)<br>详见此文：[mysql千万级数据count性能优化]</li>
+</ol>
+<p>在解决的过程中顺道看了下查询缓存的问题，线上库竟然没有开启查询缓存。特此做了些记录。<br><a id="more"></a></p>
+<h2 id="查询缓存原理"><a href="#查询缓存原理" class="headerlink" title="查询缓存原理"></a>查询缓存原理</h2><h3 id="查询缓存的实现原理"><a href="#查询缓存的实现原理" class="headerlink" title="查询缓存的实现原理"></a>查询缓存的实现原理</h3><h3 id="查询缓存的写入与过期"><a href="#查询缓存的写入与过期" class="headerlink" title="查询缓存的写入与过期"></a>查询缓存的写入与过期</h3><h2 id="查询缓存相关参数说明"><a href="#查询缓存相关参数说明" class="headerlink" title="查询缓存相关参数说明"></a>查询缓存相关参数说明</h2><h3 id="查询缓存参数"><a href="#查询缓存参数" class="headerlink" title="查询缓存参数"></a>查询缓存参数</h3><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show status like “%Qcache%”;</div><div class="line"></div><div class="line">+-------------------------+---------+</div><div class="line">|<span class="string"> Variable_name           </span>|<span class="string"> Value   </span>|</div><div class="line">+-------------------------+---------+</div><div class="line">|<span class="string"> Qcache_free_blocks      </span>|<span class="string"> 1639    </span>|</div><div class="line">|<span class="string"> Qcache_free_memory      </span>|<span class="string"> 5579448 </span>|</div><div class="line">|<span class="string"> Qcache_hits             </span>|<span class="string"> 1464051 </span>|</div><div class="line">|<span class="string"> Qcache_inserts          </span>|<span class="string"> 2442792 </span>|</div><div class="line">|<span class="string"> Qcache_lowmem_prunes    </span>|<span class="string"> 1910628 </span>|</div><div class="line">|<span class="string"> Qcache_not_cached       </span>|<span class="string"> 447381  </span>|</div><div class="line">|<span class="string"> Qcache_queries_in_cache </span>|<span class="string"> 8707    </span>|</div><div class="line">|<span class="string"> Qcache_total_blocks     </span>|<span class="string"> 19402   </span>|</div><div class="line">+-------------------------+---------+</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>变量名称</th>
+<th>中文</th>
+<th>英文</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qcache_free_blocks</td>
+<td>查询缓存中空闲内存块数量</td>
+<td>The number of free memory blocks in the query cache</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_free_memory</td>
+<td>查询缓存中空闲内存大小</td>
+<td>The amount of free memory for the query cache.</td>
+<td>单位B</td>
+</tr>
+<tr>
+<td>Qcache_hits</td>
+<td>查询缓存命中数</td>
+<td>The number of query cache hits</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_inserts</td>
+<td>加入查询缓存的语句数量</td>
+<td>The number of queries added to the query cache.</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_lowmem_prunes</td>
+<td>由于内存不足删除的查询语句数</td>
+<td>The number of queries that were deleted from the query cache because of low memory</td>
+<td>这个数字的持续增长说明内存不足或碎片严重</td>
+</tr>
+<tr>
+<td>Qcache_not_cached</td>
+<td>没有被缓存的查询语句数</td>
+<td>The number of noncached queries</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_queries_in_cache</td>
+<td>查询缓存中的语句数</td>
+<td>The number of queries registered in the query cache</td>
+<td></td>
+</tr>
+<tr>
+<td>Qcache_total_blocks</td>
+<td>查询缓存的块数</td>
+<td>The total number of blocks in the query cache</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注：所有上述参数都已经在mysql5.7.20弃用,在8.0删除,使用时，请确认mysql版本</strong></p>
+<h3 id="查询缓存配置参数"><a href="#查询缓存配置参数" class="headerlink" title="查询缓存配置参数"></a>查询缓存配置参数</h3><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="emphasis">'query_cache%'</span>;</div><div class="line"><span class="code">+------------------------------+</span>----------+</div><div class="line">| Variable<span class="emphasis">_name                | Value    |</span></div><div class="line"><span class="emphasis">+------------------------------+----------+</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_limit            | 1048576  |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_min_</span>res<span class="emphasis">_unit     | 4096     |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_size             | 16777216 |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_type             | ON       |</span></div><div class="line"><span class="emphasis">| query_</span>cache<span class="emphasis">_wlock_</span>invalidate | OFF      |</div><div class="line"><span class="code">+------------------------------+</span>----------+</div><div class="line">5 rows in set (0.00 sec)</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>变量名称</th>
+<th>中文</th>
+<th>英文</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>query_cache_limit</td>
+<td>查询结果最大限制，大于这个值的不缓存</td>
+<td>Do not cache results that are larger than this number of bytes. The default value is 1MB.</td>
+<td>默认1MB</td>
+</tr>
+<tr>
+<td>query_cache_min_res_unit</td>
+<td>查询缓存中分配的块的最小大小</td>
+<td>The minimum size (in bytes) for blocks allocated by the query cache</td>
+<td>字节为单位，默认4096B</td>
+</tr>
+<tr>
+<td>query_cache_size</td>
+<td>用于缓存查询结果的缓存大小</td>
+<td>The amount of memory allocated for caching query results.</td>
+<td>默认1M</td>
+</tr>
+<tr>
+<td>query_cache_type</td>
+<td>查询缓存的类型0/OFF：不进行查询缓存；1：缓存除SELECT SQL_NO_CACHE开头的所有可缓存查询结果；2：值缓存以SELECT SQL_CACHE开头的可缓存查询</td>
+<td>Set the query cache type</td>
+<td>默认OFF,如果选择OFF，并不会清空查询缓存大小，如果需要，需设置query_cache_size=0</td>
+</tr>
+<tr>
+<td>query_cache_wlock_invalidate</td>
+<td>针对MyISAM引擎表，对表的请求进行限制</td>
+<td>Normally, when one client acquires a WRITE lock on a MyISAM table, other clients are not blocked from issuing statements that read from the table if the query results are present in the query cache. Setting this variable to 1 causes acquisition of a WRITE lock for a table to invalidate any queries in the query cache that refer to the table. This forces other clients that attempt to access the table to wait while the lock is in effect</td>
+<td>具体解释参见官方说明</td>
+</tr>
+</tbody>
+</table>
+<p><strong>备注：所有上述参数都已经在mysql5.7.20弃用,在8.0删除,使用时，请确认mysql版本</strong></p>
+<h2 id="参考文件"><a href="#参考文件" class="headerlink" title="参考文件"></a>参考文件</h2><ol>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/server-status-variables.html" target="_blank" rel="external">5.1.7 Server Status Variables</a></li>
+<li><a href="https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html" target="_blank" rel="external">5.1.5 Server System Variables</a></li>
+<li><a href="http://database.51cto.com/art/201010/229956.htm" target="_blank" rel="external">MySQL查询缓存变量</a></li>
+<li><a href="https://www.oschina.net/question/554525_132387" target="_blank" rel="external">MYSQL会把查询的结果缓存多久?一个考验人的技术问题</a></li>
+<li><a href="/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/">[译文]mysql8.0:退出对查询缓存的支持</a></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;起因&quot;&gt;&lt;a href=&quot;#起因&quot; class=&quot;headerlink&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;&lt;p&gt;起因是近期，集客中的数据又出现了查询极慢的情况。单表1100W数据,在进行count(*)查询的时候,查询性能极差，按照特定条件的查询(已加索引)，查询出月500W数据的时候，大约耗时18s多。&lt;br&gt;可能解决方案:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;存储引擎修改&lt;/li&gt;
+&lt;li&gt;查询语句优化&lt;/li&gt;
+&lt;li&gt;离线预查(此方案结合业务场景)&lt;br&gt;详见此文：[mysql千万级数据count性能优化]&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在解决的过程中顺道看了下查询缓存的问题，线上库竟然没有开启查询缓存。特此做了些记录。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="mysql" scheme="http://yoursite.com/categories/mysql/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+      <category term="查询缓存" scheme="http://yoursite.com/tags/%E6%9F%A5%E8%AF%A2%E7%BC%93%E5%AD%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>单例模式</title>
+    <link href="http://yoursite.com/2017/09/23/design-patterns-singleton/"/>
+    <id>http://yoursite.com/2017/09/23/design-patterns-singleton/</id>
+    <published>2017-09-23T09:01:30.000Z</published>
+    <updated>2017-09-24T17:26:28.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h2><blockquote>
+<p>保证一个类仅有一个实例，并提供访问它的全局访问点</p>
+</blockquote>
+<p>我的理解：</p>
+<h2 id="适用性"><a href="#适用性" class="headerlink" title="适用性"></a>适用性</h2><blockquote>
+<ul>
+<li>当类只能有一个实例，而且客户可以从一个众所周知的访问点访问它</li>
+<li>当这个唯一的实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时</li>
+</ul>
+</blockquote>
+<p>我的理解：</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><img src="http://www.phppan.com/wp-content/uploads/2010/06/Singleton.jpg" alt="singleton"></p>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">testsingleton();</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">singleton</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> $object = <span class="keyword">null</span>;</div><div class="line">  </div><div class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">print</span> <span class="string">"create object\n"</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">self</span>::$object == <span class="keyword">null</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">self</span>::$object = <span class="keyword">new</span> singleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>::$object;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testsingleton</span><span class="params">()</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    $object = singleton::getInstance();</div><div class="line"></div><div class="line">    $object2 = singleton::getInstance();</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> $object == $object2 ? <span class="string">"one object"</span> : <span class="string">'tow object'</span>;</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> PHP_EOL;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="明显特征"><a href="#明显特征" class="headerlink" title="明显特征"></a>明显特征</h2><ol>
+<li>定义了一个public类型的用来返回对象的方法</li>
+<li>定义了一个人private的私有属性，代表具体的类对象，只能通过public方法获得</li>
+<li>非public的构造函数，不可直接new对象</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;意图&quot;&gt;&lt;a href=&quot;#意图&quot; class=&quot;headerlink&quot; title=&quot;意图&quot;&gt;&lt;/a&gt;意图&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;保证一个类仅有一个实例，并提供访问它的全局访问点&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我的理解：&lt;/p&gt;
+&lt;
+    
+    </summary>
+    
+      <category term="代码的艺术" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/"/>
+    
+    
+      <category term="设计模式" scheme="http://yoursite.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="design patterns" scheme="http://yoursite.com/tags/design-patterns/"/>
+    
+      <category term="单例模式" scheme="http://yoursite.com/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>五个设计模式</title>
+    <link href="http://yoursite.com/2017/08/26/five-design-patterns/"/>
+    <id>http://yoursite.com/2017/08/26/five-design-patterns/</id>
+    <published>2017-08-26T03:22:43.000Z</published>
+    <updated>2017-09-23T09:00:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="说在前边"><a href="#说在前边" class="headerlink" title="说在前边"></a>说在前边</h2><blockquote>
+<p>设计模式是我曾经拿起又放下的东西，经典的<strong><a href="https://book.douban.com/subject/1052241/" target="_blank" rel="external">设计模式</a></strong>那本书也是看过的,但无奈却没有看完。当了两年多的程序员，回想一下，自己对设计模式的理解竟然还是如此的不堪。</p>
+<p>随着年龄的增长，工作年限的增加，越发觉得知识的不足与停滞。所以是时候真的真的该慢慢的，默默的学习一些东西了，不然，焦躁的情绪就无处发泄。<br>也许，静静的学习，成长，才能帮助我安静下来，沉淀知识，获得成长。</p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>本次主要会重点记录自己重新学习五种主要设计模式的一些心得，做个记录。一来，帮助自己增强记忆学习；二来做个记录，方便后边回顾。</p>
+<p>为什么选择这几个模式呢，只能说，就我所知，他们被说的更多，被用的更多。</p>
+</blockquote>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><h3 id="创建型"><a href="#创建型" class="headerlink" title="创建型"></a>创建型</h3><ul>
+<li><a href="/2017/08/26/design-patterns-Factory/">工厂模式</a></li>
+<li>单例模式</li>
+</ul>
+<h3 id="结构型"><a href="#结构型" class="headerlink" title="结构型"></a>结构型</h3><ul>
+<li>适配器模式</li>
+</ul>
+<h3 id="行为型"><a href="#行为型" class="headerlink" title="行为型"></a>行为型</h3><ul>
+<li>策略模式</li>
+<li>观察者模式</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;说在前边&quot;&gt;&lt;a href=&quot;#说在前边&quot; class=&quot;headerlink&quot; title=&quot;说在前边&quot;&gt;&lt;/a&gt;说在前边&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;设计模式是我曾经拿起又放下的东西，经典的&lt;strong&gt;&lt;a href=&quot;https://book.douban.com/subject/1052241/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;设计模式&lt;/a&gt;&lt;/strong&gt;那本书也是看过的,但无奈却没有看完。当了两年多的程序员，回想一下，自己对设计模式的理解竟然还是如此的不堪。&lt;/p&gt;
+&lt;p&gt;随着年龄的增长，工作年限的增加，越发觉得知识的不足与停滞。所以是时候真的真的该慢慢的，默默的学习一些东西了，不然，焦躁的情绪就无处发泄。&lt;br&gt;也许，静静的学习，成长，才能帮助我安静下来，沉淀知识，获得成长。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="代码的艺术" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/"/>
+    
+    
+      <category term="设计模式" scheme="http://yoursite.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="design patterns" scheme="http://yoursite.com/tags/design-patterns/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>工厂模式</title>
+    <link href="http://yoursite.com/2017/08/26/design-patterns-Factory/"/>
+    <id>http://yoursite.com/2017/08/26/design-patterns-Factory/</id>
+    <published>2017-08-26T03:11:00.000Z</published>
+    <updated>2017-08-26T03:33:32.000Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+      <category term="代码的艺术" scheme="http://yoursite.com/categories/%E4%BB%A3%E7%A0%81%E7%9A%84%E8%89%BA%E6%9C%AF/"/>
+    
+    
+      <category term="设计模式" scheme="http://yoursite.com/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+    
+      <category term="design patterns" scheme="http://yoursite.com/tags/design-patterns/"/>
+    
+      <category term="工厂模式" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>linux下忘记mysql的root密码怎么办</title>
