@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  1,110
+                  1,098
                 </span>
               
 
@@ -408,40 +408,20 @@
 
       
         
-          
-            <p><strong><em>原文链接：<a href="http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/" target="_blank" rel="external">http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/</a></em></strong></p>
+          <p><strong><em>原文链接：<a href="http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/" target="_blank" rel="external">http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/</a></em></strong></p>
 <p><strong><em>Author:Morgan Tocker(the Product Manager for the MySQL Server)</em></strong></p>
 <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>正如Rene昨天在<a href="http://proxysql.com/blog/scaling-with-proxysql-query-cache" target="_blank" rel="external">ProxySQL</a>博客上写道：</p>
 <blockquote>
 <p>尽管MySQL查询缓存旨在提高性能，但它具有严重的可扩展性问题，并且很容易成为严重的瓶颈。</p>
 </blockquote>
-<p>这确实是我们在MySQL团队观察一段时间后得到的结论。在我们了解今天的文章之前，让我先来介绍一下查询缓存。</p>
-<h2 id="查询缓存简介"><a href="#查询缓存简介" class="headerlink" title="查询缓存简介"></a>查询缓存简介</h2><p>MySQL查询缓存是查询结果缓存。他会将以<strong>SEL</strong>开头的查询语句与一个散列表进行比较，如果有匹配则返回上一次执行查询的结果。这里还有一些限制：</p>
-<ul>
-<li>查询必须匹配字节级的匹配（查询缓存避免解析）</li>
-<li>使用<a href="https://dev.mysql.com/doc/refman/5.7/en/query-cache-operation.html" target="_blank" rel="external">非确定性特征</a>将导致查询不被缓存（包括临时表，用户变量，RAND（），NOW（）和UDF））</li>
-<li>查询缓存旨在不提供过时的结果。对基础表的任何修改都会导致所有缓存对于这些表无效。</li>
-<li>如果缓存用在InnoDB引擎中，会有一些限制（对于MVCC，因为您打开了一个事务，“缓存”可能不会得到用户预期中的数据）</li>
-</ul>
-<h2 id="最佳案例"><a href="#最佳案例" class="headerlink" title="最佳案例"></a>最佳案例</h2><p>正如我几年前在个人博客上写的：</p>
-<blockquote>
-<p>查询缓存的理想使用场景往往在很大程度上是只读的，这个场景下，通过非常大的代价去检查数百万行数据，但是指返回很少的结果 一个假设出的例子是可能有一个复杂的查询来得到一个网页上的表单中的下拉列表的值，在这种情况下，查询缓存可以掩盖由于缺少的索引引起的查询性能问题，这对新手用户有帮助。</p>
-</blockquote>
-<p>这个观点在今天仍然适用，但是我认为重要的是还要指出，我们现在已经有很多DBA工具的对这些性能有所改善：</p>
-<ul>
-<li>在MySQL服务器中，我们现在可以重写查询以插入提示（或通过其他修改来提高性能）</li>
-<li>我们有如ProxySQL这样的第三方工具，可以充当中间人查询缓存。 ProxySQL还支持缓存的TTL，它在我之前提供的示例中可以正常工作（构建下拉列表的值列表）。</li>
-</ul>
-<h2 id="查询缓存的限制"><a href="#查询缓存的限制" class="headerlink" title="查询缓存的限制"></a>查询缓存的限制</h2><p>自从MySQL 5.6（2013）以来，查询缓存已被禁用，因为它已知在多核机器上不能与高吞吐量工作负载的规模相比较。 Rene昨天在他的帖子中证实了这一点，而且这个问题之前也曾被<a href="https://www.flamingspork.com/blog/2014/06/05/performance-impact-of-mysql-query-cache-on-modern-hardware/" target="_blank" rel="external">Stewart Smith</a>和<a href="https://dom.as/tech/query-cache-tuner/" target="_blank" rel="external">Domas Mituzas</a>（更新：<a href="http://blog.koehntopp.info/index.php/1844-good-riddance-to-the-query-cache/" target="_blank" rel="external">Kristian Koehntopp</a>）提及。</p>
-<p>假设可扩展性可以提高，查询缓存的限制因素在于，只有查询命中了的缓存才能看到改进; 它不太可能提高性能的可预测性。 对于面向用户的系统，降低性能的可变性通常比提高峰值吞吐量更重要：<br><img src="http://mysqlserverteam.com/wp-content/uploads/2017/05/Predictability-SIGMOD2017-768x576.jpg" alt="现有DBMS系统性能的预测"><br><img src="http://mysqlserverteam.com/wp-content/uploads/2017/05/Predictability-SIGMOD2017-2-768x576.jpg" alt="为什么性能可预测性很重要"><br><strong><em>[\</em>数据来源](<a href="http://web.eecs.umich.edu/~mozafari/php/data/uploads/Predictability-SIGMOD2017.pdf)*" target="_blank" rel="external">http://web.eecs.umich.edu/~mozafari/php/data/uploads/Predictability-SIGMOD2017.pdf)*</a></strong></p>
-<h2 id="决定删除对查询缓存的支持"><a href="#决定删除对查询缓存的支持" class="headerlink" title="决定删除对查询缓存的支持"></a>决定删除对查询缓存的支持</h2><p>我们赞同University of Michigan, Ann Arbor大学的Jiamin Huang，Barzan Mozafari，Grant Schoenebeck，Thomas F. Wenisch的<a href="https://web.eecs.umich.edu/~mozafari/php/data/uploads/sigmod_2017_predictability.pdf" target="_blank" rel="external">研究成果</a>。 我们考虑了两种方案：一个是我们可以对查询缓存进行哪些改进的方案，另一个是我们可以做出哪些改进，从而为所有工作负载提供改进。</p>
-<p>虽然这些选择本身是正交的，但工程资源是有限的。也就是说，我们要改变战略，去把资源投资到能够普遍适用于所有工作负载的改进上来。</p>
-<p>我们也同意<a href="http://proxysql.com/blog/scaling-with-proxysql-query-cache" target="_blank" rel="external">Rene的结论</a>，即缓存在靠近客户端时提供了最大的好处<br><img src="http://mysqlserverteam.com/wp-content/uploads/2017/05/QC2.png" alt="缓存性能的表现"><br><strong><em>将缓存移到客户端时，“Client + 2x ProxySQL”结果显示性能提升了5.2倍。</em></strong></p>
-<h2 id="现有用户的升级路径"><a href="#现有用户的升级路径" class="headerlink" title="现有用户的升级路径"></a>现有用户的升级路径</h2><p>根据当前的提示说明，查询缓存在MySQL 5.7一下版本仍然会继续得到支持。 但MySQL 8.0不再支持查询缓存，用户升级将被鼓励使用服务器端查询重写或ProxySQL作为中间缓存</p>
-<p>我们预计这种变化只会影响到少数用户，但如果您关心此问题，请联系并联系！</p>
-<p>感谢您使用MySQL！！</p>
-
-          
+<p>这确实是我们在MySQL团队观察一段时间后得到的结论。在我们了解今天的文章之前，让我先来介绍一下查询缓存。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
