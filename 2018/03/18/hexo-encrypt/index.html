@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="工具,hexo," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Description of how to user hexo-encrypt.">
+<meta name="keywords" content="工具,hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用hexo-blog-encrypt-完成博文加密">
+<meta property="og:url" content="http://yoursite.com/2018/03/18/hexo-encrypt/index.html">
+<meta property="og:site_name" content="musezhang的一亩三分地">
+<meta property="og:description" content="Description of how to user hexo-encrypt.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-18T16:17:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用hexo-blog-encrypt-完成博文加密">
+<meta name="twitter:description" content="Description of how to user hexo-encrypt.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/18/hexo-encrypt/"/>
+
+
+
+
+
+  <title>使用hexo-blog-encrypt-完成博文加密 | musezhang的一亩三分地</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?de2cae3f9dd86886f107642df2863b1d";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">musezhang的一亩三分地</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/18/hexo-encrypt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="muse zhang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="musezhang的一亩三分地">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用hexo-blog-encrypt-完成博文加密</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-18T23:18:45+08:00">
+                2018-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/hexo/" itemprop="url" rel="index">
+                    <span itemprop="name">hexo</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  268
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="/crypto-js.js"></script><script src="/mcommon.js"></script><h3 id="encrypt-message">The password is 123456</h3><link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> <div id="security"> <div> <div class="input-group"> <input type="text" class="form-control" aria-label="Enter the password." id="pass"/> <div class="input-group-btn"> <button type="button" class="btn btn-default" onclick="decryptAES()">Decrypt</button> </div> </div> </div> </div> <div id="encrypt-blog" style="display:none"> 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 </div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
+          
+            <a href="/tags/hexo/" rel="tag"># hexo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/06/some-dangerous-functions-in-php/" rel="next" title="一些需要禁用的PHP危险函数">
+                <i class="fa fa-chevron-left"></i> 一些需要禁用的PHP危险函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg"
+               alt="muse zhang" />
+          <p class="site-author-name" itemprop="name">muse zhang</p>
+           
+              <p class="site-description motion-element" itemprop="description">To do something</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/musezhang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1673800462" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#encrypt-message"><span class="nav-number">1.</span> <span class="nav-text">The password is 123456</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">muse zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

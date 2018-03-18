@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-10-20T04:57:54.000Z</updated>
+  <updated>2018-03-18T16:17:17.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,117 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>使用hexo-blog-encrypt-完成博文加密</title>
+    <link href="http://yoursite.com/2018/03/18/hexo-encrypt/"/>
+    <id>http://yoursite.com/2018/03/18/hexo-encrypt/</id>
+    <published>2018-03-18T15:18:45.000Z</published>
+    <updated>2018-03-18T16:17:17.000Z</updated>
+    
+    <content type="html"><![CDATA[<script src="/crypto-js.js"></script><script src="/mcommon.js"></script><h3 id="encrypt-message">The password is 123456</h3><link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> <div id="security"> <div> <div class="input-group"> <input type="text" class="form-control" aria-label="Enter the password." id="pass"/> <div class="input-group-btn"> <button type="button" class="btn btn-default" onclick="decryptAES()">Decrypt</button> </div> </div> </div> </div> <div id="encrypt-blog" style="display:none"> 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 </div>]]></content>
+    
+    <summary type="html">
+    
+      Description of how to user hexo-encrypt.
+    
+    </summary>
+    
+      <category term="hexo" scheme="http://yoursite.com/categories/hexo/"/>
+    
+    
+      <category term="工具" scheme="http://yoursite.com/tags/%E5%B7%A5%E5%85%B7/"/>
+    
+      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一些需要禁用的PHP危险函数</title>
+    <link href="http://yoursite.com/2018/03/06/some-dangerous-functions-in-php/"/>
+    <id>http://yoursite.com/2018/03/06/some-dangerous-functions-in-php/</id>
+    <published>2018-03-05T17:01:56.000Z</published>
+    <updated>2018-03-18T16:34:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><blockquote>
+<p>本文说明了一些在php中需要禁用的函数，这些函数可能会引起服务器问题，造成不必要的麻烦。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="有哪些？"><a href="#有哪些？" class="headerlink" title="有哪些？"></a>有哪些？</h2><ol>
+<li><p><strong>phpinfo()</strong><br>功能描述：输出 PHP 环境信息以及相关的模块、WEB 环境等信息。<br>危险等级：<font color="orange">中</font></p>
+</li>
+<li><p><strong>passthru()</strong><br>功能描述：允许执行一个外部程序并回显输出，类似于 exec()。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>exec()</strong><br>功能描述：允许执行一个外部程序（如 UNIX Shell 或 CMD 命令等）。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>system()</strong><br>功能描述：允许执行一个外部程序并回显输出，类似于 passthru()。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>chroot()</strong><br>功能描述：可改变当前 PHP 进程的工作根目录，仅当系统支持 CLI 模式,PHP 时才能工作，且该函数不适用于 Windows 系统。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>scandir()</strong><br>功能描述：列出指定路径中的文件和目录。<br>危险等级：<font color="orange">中</font></p>
+</li>
+<li><p><strong>chgrp()</strong><br>功能描述：改变文件或目录所属的用户组。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>chown()</strong><br>功能描述：改变文件或目录的所有者。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>shell_exec()</strong><br>功能描述：通过 Shell 执行命令，并将执行结果作为字符串返回。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>proc_open()</strong><br>功能描述：执行一个命令并打开文件指针用于读取以及写入。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>proc_get_status()</strong><br>功能描述：获取使用 proc_open() 所打开进程的信息。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>error_log()</strong><br>功能描述：将错误信息发送到指定位置（文件）。<br>安全备注：在某些版本的 PHP 中，可使用 error_log() 绕过 PHP safe mode，执行任意命令。<br>危险等级：<font color="yellow">低</font></p>
+</li>
+<li><p><strong>ini_alter()</strong><br>功能描述：是 ini_set() 函数的一个别名函数，功能与 ini_set() 相同。具体参见 ini_set()。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>ini_set()</strong><br>功能描述：可用于修改、设置 PHP 环境配置参数。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>ini_restore()</strong><br>功能描述：可用于恢复 PHP 环境配置参数到其初始值。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>dl()</strong><br>功能描述：在 PHP 进行运行过程当中（而非启动时）加载一个 PHP 外部模块。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>pfsockopen()</strong><br>功能描述：建立一个 Internet 或 UNIX 域的 socket 持久连接。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>syslog()</strong><br>功能描述：可调用 UNIX 系统的系统层 syslog() 函数。<br>危险等级：<font color="orange">中</font></p>
+</li>
+<li><p><strong>readlink()</strong><br>功能描述：返回符号连接指向的目标文件内容。<br>危险等级：<font color="orange">中</font></p>
+</li>
+<li><p><strong>symlink()</strong><br>功能描述：在 UNIX 系统中建立一个符号链接。<br>危险等级：<font color="red">高</font></p>
+</li>
+<li><p><strong>popen()</strong><br>功能描述：可通过 popen() 的参数传递一条命令，并对 popen() 所打开的文件进行执行。<br>危险等级: <font color="red">高</font></p>
+</li>
+<li><p><strong>stream_socket_server()</strong><br>功能描述：建立一个 Internet 或 UNIX 服务器连接。<br>危险等级：<font color="orange">中</font></p>
+</li>
+<li><p><strong>putenv()</strong><br>功能描述：用于在 PHP 运行时改变系统字符集环境。在低于 5.2.6 版本的 PHP 中，可利用该函数修改系统字符集环境后，利用 sendmail 指令发送特殊参数执行系统 SHELL 命令。<br>危险等级：<font color="red">高</font></p>
+</li>
+</ol>
+<h2 id="禁用方法"><a href="#禁用方法" class="headerlink" title="禁用方法"></a>禁用方法</h2><ol>
+<li>打开/etc/php.ini文件，</li>
+<li>查找到 disable_functions ，添加需禁用的函数名，如下：<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">phpinfo,<span class="keyword">eval</span>,passthru,<span class="keyword">exec</span>,<span class="keyword">system</span>,<span class="keyword">chroot</span>,scandir,chgrp,<span class="keyword">chown</span>,shell_exec,proc_open,proc_get_status,ini_alter,ini_alter,ini_restore,dl,pfsockopen,openlog,syslog,<span class="keyword">readlink</span>,<span class="keyword">symlink</span>,popepassthru,stream_socket_server,fsocket,fsockopen</div></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;说明&quot;&gt;&lt;a href=&quot;#说明&quot; class=&quot;headerlink&quot; title=&quot;说明&quot;&gt;&lt;/a&gt;说明&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;本文说明了一些在php中需要禁用的函数，这些函数可能会引起服务器问题，造成不必要的麻烦。&lt;/p&gt;
+&lt;/blockquote&gt;
+    
+    </summary>
+    
+      <category term="程序语言" scheme="http://yoursite.com/categories/%E7%A8%8B%E5%BA%8F%E8%AF%AD%E8%A8%80/"/>
+    
+    
+      <category term="php" scheme="http://yoursite.com/tags/php/"/>
+    
+      <category term="code" scheme="http://yoursite.com/tags/code/"/>
+    
+  </entry>
+  
+  <entry>
     <title>【译文】mysql8.0:退出对查询缓存的支持</title>
     <link href="http://yoursite.com/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/"/>
     <id>http://yoursite.com/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/</id>
     <published>2017-10-19T18:37:37.000Z</published>
-    <updated>2017-10-20T04:57:54.000Z</updated>
+    <updated>2018-03-18T15:58:18.000Z</updated>
     
     <content type="html"><![CDATA[<p><strong><em>原文链接：<a href="http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/" target="_blank" rel="external">http://mysqlserverteam.com/mysql-8-0-retiring-support-for-the-query-cache/</a></em></strong></p>
 <p><strong><em>Author:Morgan Tocker(the Product Manager for the MySQL Server)</em></strong></p>
@@ -234,12 +340,12 @@
     <link href="http://yoursite.com/2017/09/23/design-patterns-singleton/"/>
     <id>http://yoursite.com/2017/09/23/design-patterns-singleton/</id>
     <published>2017-09-23T09:01:30.000Z</published>
-    <updated>2017-09-24T17:26:28.000Z</updated>
+    <updated>2018-03-18T15:58:48.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h2><blockquote>
 <p>保证一个类仅有一个实例，并提供访问它的全局访问点</p>
 </blockquote>
-<p>我的理解：</p>
+<p>我的理解：<br><a id="more"></a></p>
 <h2 id="适用性"><a href="#适用性" class="headerlink" title="适用性"></a>适用性</h2><blockquote>
 <ul>
 <li>当类只能有一个实例，而且客户可以从一个众所周知的访问点访问它</li>
@@ -261,8 +367,7 @@
       &lt;h2 id=&quot;意图&quot;&gt;&lt;a href=&quot;#意图&quot; class=&quot;headerlink&quot; title=&quot;意图&quot;&gt;&lt;/a&gt;意图&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;保证一个类仅有一个实例，并提供访问它的全局访问点&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;我的理解：&lt;/p&gt;
-&lt;
+&lt;p&gt;我的理解：&lt;br&gt;
     
     </summary>
     
@@ -701,15 +806,13 @@
     <link href="http://yoursite.com/2017/07/29/My-First-Hexo-blog/"/>
     <id>http://yoursite.com/2017/07/29/My-First-Hexo-blog/</id>
     <published>2017-07-28T16:42:08.000Z</published>
-    <updated>2017-07-29T08:37:46.000Z</updated>
+    <updated>2018-03-18T16:21:35.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="随便说说"><a href="#随便说说" class="headerlink" title="随便说说"></a>随便说说</h2><p>时间是2017年07月29日14:39:40，12个小时前，终于在github上创建了自己的的博客站，内容呢还处于什么都没有的阶段。所以在12个小时候现在，赶紧写下第一篇blog。<br><a id="more"></a></p>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><p>其实第一篇也没什么好说的，以后就加油吧，希望能多在这上边记录一些东西。算是对自己成长的记录吧</p>
-]]></content>
+    <content type="html"><![CDATA[<script src="/crypto-js.js"></script><script src="/mcommon.js"></script><h3 id="encrypt-message">sorry, you can't read this post!</h3><link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> <div id="security"> <div> <div class="input-group"> <input type="text" class="form-control" aria-label="Enter the password." id="pass"/> <div class="input-group-btn"> <button type="button" class="btn btn-default" onclick="decryptAES()">Decrypt</button> </div> </div> </div> </div> <div id="encrypt-blog" style="display:none"> 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 </div>]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;随便说说&quot;&gt;&lt;a href=&quot;#随便说说&quot; class=&quot;headerlink&quot; title=&quot;随便说说&quot;&gt;&lt;/a&gt;随便说说&lt;/h2&gt;&lt;p&gt;时间是2017年07月29日14:39:40，12个小时前，终于在github上创建了自己的的博客站，内容呢还处于什么都没有的阶段。所以在12个小时候现在，赶紧写下第一篇blog。&lt;br&gt;
+      sorry, you can&#39;t read this post!
     
     </summary>
     

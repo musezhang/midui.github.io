@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2018/03/06/some-dangerous-functions-in-php/</loc>
+    
+    <lastmod>2018-03-18T16:34:52.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/07/29/My-First-Hexo-blog/</loc>
+    
+    <lastmod>2018-03-18T16:21:35.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/18/hexo-encrypt/</loc>
+    
+    <lastmod>2018-03-18T16:17:17.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2017/09/23/design-patterns-singleton/</loc>
+    
+    <lastmod>2018-03-18T15:58:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/10/20/mysql-8-0-retiring-support-for-the-query-cache/</loc>
     
-    <lastmod>2017-10-20T04:57:54.000Z</lastmod>
+    <lastmod>2018-03-18T15:58:18.000Z</lastmod>
     
   </url>
   
@@ -12,13 +40,6 @@
     <loc>http://yoursite.com/2017/10/20/mysql-query-cache/</loc>
     
     <lastmod>2017-10-19T18:41:27.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/09/23/design-patterns-singleton/</loc>
-    
-    <lastmod>2017-09-24T17:26:28.000Z</lastmod>
     
   </url>
   
@@ -68,13 +89,6 @@
     <loc>http://yoursite.com/2017/07/29/some_tips/</loc>
     
     <lastmod>2017-07-29T09:06:52.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2017/07/29/My-First-Hexo-blog/</loc>
-    
-    <lastmod>2017-07-29T08:37:46.000Z</lastmod>
     
   </url>
   
