@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2018/03/20/json-encode-of-php/</loc>
+    
+    <lastmod>2018-03-20T17:37:18.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2018/03/06/some-dangerous-functions-in-php/</loc>
+    
+    <lastmod>2018-03-20T17:29:48.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2017/07/29/My-First-Hexo-blog/</loc>
     
     <lastmod>2018-03-19T01:49:06.000Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>http://yoursite.com/2017/07/29/hello-world/</loc>
     
     <lastmod>2018-03-19T01:48:08.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2018/03/06/some-dangerous-functions-in-php/</loc>
-    
-    <lastmod>2018-03-18T16:34:52.000Z</lastmod>
     
   </url>
   

@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="php,json_encode,json_decode," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言 最近在使用json_encode函数的时候，发现自己以前使用json_encode太简单了。很多细节没有注意到，虽然也能用，但是却引发了一些问题。所以本文主要去记录下json_encode和json_decode的项目用法。">
+<meta name="keywords" content="php,json_encode,json_decode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php中json_encode和json_decode的说明">
+<meta property="og:url" content="http://yoursite.com/2018/03/20/json-encode-of-php/index.html">
+<meta property="og:site_name" content="musezhang的一亩三分地">
+<meta property="og:description" content="前言 最近在使用json_encode函数的时候，发现自己以前使用json_encode太简单了。很多细节没有注意到，虽然也能用，但是却引发了一些问题。所以本文主要去记录下json_encode和json_decode的项目用法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-20T17:37:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="php中json_encode和json_decode的说明">
+<meta name="twitter:description" content="前言 最近在使用json_encode函数的时候，发现自己以前使用json_encode太简单了。很多细节没有注意到，虽然也能用，但是却引发了一些问题。所以本文主要去记录下json_encode和json_decode的项目用法。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/20/json-encode-of-php/"/>
+
+
+
+
+
+  <title>php中json_encode和json_decode的说明 | musezhang的一亩三分地</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?43e13b8b395fbf3f20f4a0a781d37cb1";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">musezhang的一亩三分地</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/20/json-encode-of-php/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="muse zhang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="musezhang的一亩三分地">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">php中json_encode和json_decode的说明</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-20T16:24:06+08:00">
+                2018-03-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/php/" itemprop="url" rel="index">
+                    <span itemprop="name">php</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  1,046
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>最近在使用json_encode函数的时候，发现自己以前使用json_encode太简单了。很多细节没有注意到，虽然也能用，但是却引发了一些问题。所以本文主要去记录下json_encode和json_decode的项目用法。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="json-encode"><a href="#json-encode" class="headerlink" title="json_encode"></a>json_encode</h2><h3 id="函数说明"><a href="#函数说明" class="headerlink" title="函数说明"></a>函数说明</h3><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> json_encode ( mixed $value [, <span class="built_in">int</span> $options = <span class="number">0</span> [, <span class="built_in">int</span> $depth = <span class="number">512</span> ]] )</div></pre></td></tr></table></figure>
+<h3 id="详细参数说明"><a href="#详细参数说明" class="headerlink" title="详细参数说明"></a>详细参数说明</h3><p><strong>value</strong>: 可以是任何非resource类型的任何数据类型的值<br><strong>options</strong>: 对value进行encode的选项,主要是控制特殊字符是否进行unicode编码，可以设置选项如下：</p>
+<ul>
+<li><p>JSON_HEX_TAG =&gt; 1 : 所有的 <font color="red"><strong>&lt;</strong></font> 和 <font color="red"><strong>&gt;</strong></font> 符号都被转换成\u003C和\u003E(since 5.3.0)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = <span class="string">"hello &lt;jcak&gt;"</span>;</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>;  <span class="regexp">//</span>输出<span class="string">"hello &lt;jack&gt;"</span></div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_HEX_TAG) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出<span class="string">"hello \u003Cjack\u003E"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_HEX_AMP =&gt; 2 : 所有的 <font color="red"><strong>&amp;</strong></font> 转换为\u0026(since 5.3.0)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = <span class="string">"hello jack &amp;"</span>;</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>;  <span class="regexp">//</span>输出<span class="string">"hello jack &amp;"</span></div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_HEX_AMP) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出<span class="string">"hello jack \u0026"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_HEX_APOS =&gt; 4：所有的单引号 <font color="red"><strong>‘</strong></font> 转换成\u0027(since 5.3.0)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = <span class="string">"hello 'jack'"</span>;</div><div class="line"><span class="built_in">echo</span> json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>;  //输出<span class="string">"hello 'jack'"</span></div><div class="line"><span class="built_in">echo</span> json_encode(<span class="variable">$value</span>, JSON_HEX_AMP) . <span class="string">"\n"</span>; <span class="string">"hello \u0027jack\u0027"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_HEX_QUOT =&gt; 8 : 所有的双引号 <font color="red"><strong>“</strong></font> 转换成\u0022（since 5.3.0)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = <span class="string">'hello "jack"'</span>;</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出<span class="string">"hello \"jack\""</span> ，为了区别外层的双引号，增加了转义字符，</div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_HEX_QUOT) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出<span class="string">"hello \u0022jack\u0022"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_FORCE_OBJECT =&gt; 16 : 当使用非关联数组时，输出一个对象而不是数组。当输出的接收者<strong><em>期待对象并且数组为空时特别有用</em></strong>。(since 5.3.0)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = array(<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>);</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出[<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>]</div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_FORCE_OBJECT) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出&#123;<span class="string">"0"</span>:<span class="string">"a"</span>,<span class="string">"1"</span>:<span class="string">"b"</span>,<span class="string">"2"</span>:<span class="string">"c"</span>&#125;</div><div class="line"></div><div class="line"><span class="variable">$value</span> = array();</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出[]</div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_FORCE_OBJECT) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出&#123;&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_NUMERIC_CHECK =&gt; 32 : 将数字字符串编码为数字(since 5.3.3)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash">value = <span class="string">"123456"</span>;</span></div><div class="line"><span class="meta">var_dump(json_encode($</span><span class="bash">value)); //输出string(8) <span class="string">""</span>123456<span class="string">""</span>,可以看出，转换出来的是字符串</span></div><div class="line"><span class="meta">var_dump(json_encode($</span><span class="bash">value, JSON_NUMERIC_CHECK));//输出string(6) <span class="string">"123456"</span>,可以看出转换出来的是数字，比不加参数，少两个字符</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_UNESCAPED_SLASHES =&gt; 64 : 不对反斜杠 <font color="red"><strong>/</strong></font>进行转义(since 5.4.0)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = <span class="string">"/hello jack"</span>;</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出 <span class="string">"\/hello jack"</span>，做了转义处理</div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_UNESCAPED_SLASHES)) . <span class="string">"\n"</span>;<span class="regexp">//</span> 输出string(<span class="number">13</span>) <span class="string">"/hello jack"</span>，未作转义处理</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_PRETTY_PRINT =&gt; 128 : 格式化返回的数据,美化输出，一般数组很有效(since 5.4.0)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$value = <span class="keyword">array</span>(<span class="string">"word"</span> =&gt; <span class="string">"hello jack"</span>);</div><div class="line"><span class="keyword">echo</span> json_encode($value) . <span class="string">"\n"</span>; <span class="comment">//输出&#123;"word":"hello jack"&#125;</span></div><div class="line"><span class="keyword">echo</span> json_encode($value, JSON_PRETTY_PRINT) . <span class="string">"\n"</span>;</div><div class="line"><span class="comment">//输出如下：</span></div><div class="line">&#123;</div><div class="line">    <span class="string">"word"</span>: <span class="string">"hello jack"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_UNESCAPED_UNICODE =&gt; 256 :从字面上对多字节Unicode字符进行编码，如对<strong><em>中文不进行unicode转码</em></strong>，不会转换为\uXXXX这种格式(since 5.4.0)</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$value</span> = <span class="string">"hello jack, 这是一条测试信息"</span>;</div><div class="line">echo json_encode(<span class="variable">$value</span>) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出<span class="string">"hello jack, \u8fd9\u662f\u4e00\u6761\u6d4b\u8bd5\u4fe1\u606f"</span></div><div class="line">echo json_encode(<span class="variable">$value</span>, JSON_UNESCAPED_UNICODE) . <span class="string">"\n"</span>; <span class="regexp">//</span>输出<span class="string">"hello jack, 这是一条测试信息"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_PARTIAL_OUTPUT_ON_ERROR =&gt; 512 :用一些不可修改的值代替失败(since 5.5.0)</p>
+</li>
+<li>JSON_PRESERVE_ZERO_FRACTION =&gt; 1024 : 确保浮点值始终编码为浮点值(since 5.6.6)<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$value = <span class="number">277.00000</span>;</div><div class="line"><span class="keyword">echo</span> json_encode($value) . <span class="string">"\n"</span>; <span class="comment">//输出：277，整数</span></div><div class="line"><span class="keyword">echo</span> json_encode($value, JSON_PRESERVE_ZERO_FRACTION) . <span class="string">"\n"</span>; <span class="comment">//输出277.0 浮点数</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><strong>depth</strong>: 设置最大深度，必须大于0，主要是针对数组来说的，是可以encode的数组的最大深度<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">$value = <span class="keyword">array</span>(<span class="string">"name"</span> =&gt; <span class="string">"midui"</span>, <span class="string">"location"</span> =&gt; <span class="keyword">array</span>(<span class="string">"province"</span>=&gt;<span class="string">"beijing"</span>, <span class="string">"city"</span>=&gt; <span class="string">"beijing"</span>));</div><div class="line">echo json_encode($value) . <span class="string">"\n"</span>; </div><div class="line">//输出&#123;<span class="string">"name"</span>:<span class="string">"midui"</span>,<span class="string">"location"</span>:&#123;<span class="string">"province"</span>:<span class="string">"beijing"</span>,<span class="string">"city"</span>:<span class="string">"beijing"</span>&#125;&#125;</div><div class="line">echo json_encode($value, JSON_PRESERVE_ZERO_FRACTION, <span class="number">1</span>) . <span class="string">"\n"</span>; </div><div class="line">//无法encode,注意，此时把第二个参数修改为JSON_PARTIAL_OUTPUT_ON_ERROR,则可以encode，原因不明</div></pre></td></tr></table></figure></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>一般来说，我们使用json_encode都没有使用后两个参数，但是在某些特定的情况下，有一些参数还是可以供我们使用的。<br>如：</p>
+<ul>
+<li>需要对特殊符号(&lt;,&gt;,’,”,&amp;)进行编码的,使用<strong>JSON_HEX_TAG,JSON_HEX_AMP,JSON_HEX_APOS,JSON_HEX_QUOT</strong>等</li>
+<li>不需要对中文进行编码的情况，使用<strong>JSON_UNESCAPED_UNICODE</strong></li>
+<li>需要将空数组编码为对象，而不是数组的时候使用<strong>JSON_FORCE_OBJECT</strong></li>
+<li>如果要使用多个参数，则可以将参数值相加，如同时需要对&lt;和&amp;进行编码,但不对中文编码，那么<blockquote>
+<p>第二个参数值 = JSON_HEX_TAG + JSON_HEX_AMP + JSON_UNESCAPED_UNICODE = 259</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="formula">$value = "hello &lt;jack&gt; &amp;, 你是谁";</span></div><div class="line"><span class="formula">echo json_encode($</span>value) . "<span class="tag">\<span class="name">n</span></span>"; //不特殊处理，输出"hello &lt;jack&gt; &amp;, <span class="tag">\<span class="name">u</span></span>4f60<span class="tag">\<span class="name">u</span></span>662f<span class="tag">\<span class="name">u</span></span>8c01"</div><div class="line">echo json_encode(<span class="formula">$value, 1) . "<span class="tag">\<span class="name">n</span></span>"; //对&lt;,&gt;编码，输出"hello <span class="tag">\<span class="name">u</span></span>003Cjack<span class="tag">\<span class="name">u</span></span>003E &amp;, <span class="tag">\<span class="name">u</span></span>4f60<span class="tag">\<span class="name">u</span></span>662f<span class="tag">\<span class="name">u</span></span>8c01"</span></div><div class="line"><span class="formula">echo json_encode($</span>value, 3) . "<span class="tag">\<span class="name">n</span></span>"; //对&lt;,&gt;,&amp;编码,输出"hello <span class="tag">\<span class="name">u</span></span>003Cjack<span class="tag">\<span class="name">u</span></span>003E <span class="tag">\<span class="name">u</span></span>0026, <span class="tag">\<span class="name">u</span></span>4f60<span class="tag">\<span class="name">u</span></span>662f<span class="tag">\<span class="name">u</span></span>8c01"</div><div class="line">echo json_encode(<span class="formula">$value, 259) . "<span class="tag">\<span class="name">n</span></span>";//对&lt;,&gt;,&amp;编码,不对中文编码，输出"hello <span class="tag">\<span class="name">u</span></span>003Cjack<span class="tag">\<span class="name">u</span></span>003E <span class="tag">\<span class="name">u</span></span>0026, 你是谁"</span></div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h2 id="To-be-continue。。。"><a href="#To-be-continue。。。" class="headerlink" title="To be continue。。。"></a>To be continue。。。</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/php/" rel="tag"># php</a>
+          
+            <a href="/tags/json-encode/" rel="tag"># json_encode</a>
+          
+            <a href="/tags/json-decode/" rel="tag"># json_decode</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/18/hexo-encrypt/" rel="next" title="使用hexo-blog-encrypt-完成博文加密">
+                <i class="fa fa-chevron-left"></i> 使用hexo-blog-encrypt-完成博文加密
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg"
+               alt="muse zhang" />
+          <p class="site-author-name" itemprop="name">muse zhang</p>
+           
+              <p class="site-description motion-element" itemprop="description">To do something</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/musezhang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1673800462" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#json-encode"><span class="nav-number">2.</span> <span class="nav-text">json_encode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数说明"><span class="nav-number">2.1.</span> <span class="nav-text">函数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细参数说明"><span class="nav-number">2.2.</span> <span class="nav-text">详细参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#To-be-continue。。。"><span class="nav-number">3.</span> <span class="nav-text">To be continue。。。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">muse zhang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
