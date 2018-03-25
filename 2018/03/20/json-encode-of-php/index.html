@@ -100,7 +100,7 @@
 <meta property="og:site_name" content="米堆的一亩三分地">
 <meta property="og:description" content="前言 最近在使用json_encode函数的时候，发现自己以前使用json_encode太简单了。很多细节没有注意到，虽然也能用，但是却引发了一些问题。所以本文主要去记录下json_encode和json_decode的项目用法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-20T17:37:18.000Z">
+<meta property="og:updated_time" content="2018-03-25T07:58:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="php中json_encode和json_decode的说明">
 <meta name="twitter:description" content="前言 最近在使用json_encode函数的时候，发现自己以前使用json_encode太简单了。很多细节没有注意到，虽然也能用，但是却引发了一些问题。所以本文主要去记录下json_encode和json_decode的项目用法。">
@@ -368,7 +368,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  1,046
+                  1,420
                 </span>
               
 
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  5
+                  6
                 </span>
               
             </div>
@@ -410,6 +410,7 @@
 </blockquote>
 <a id="more"></a>
 <h2 id="json-encode"><a href="#json-encode" class="headerlink" title="json_encode"></a>json_encode</h2><h3 id="函数说明"><a href="#函数说明" class="headerlink" title="函数说明"></a>函数说明</h3><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">string</span> json_encode ( mixed $value [, <span class="built_in">int</span> $options = <span class="number">0</span> [, <span class="built_in">int</span> $depth = <span class="number">512</span> ]] )</div></pre></td></tr></table></figure>
+<p>返回包含所提供值的JSON表示的字符串</p>
 <h3 id="详细参数说明"><a href="#详细参数说明" class="headerlink" title="详细参数说明"></a>详细参数说明</h3><p><strong>value</strong>: 可以是任何非resource类型的任何数据类型的值<br><strong>options</strong>: 对value进行encode的选项,主要是控制特殊字符是否进行unicode编码，可以设置选项如下：</p>
 <ul>
 <li><p>JSON_HEX_TAG =&gt; 1 : 所有的 <font color="red"><strong>&lt;</strong></font> 和 <font color="red"><strong>&gt;</strong></font> 符号都被转换成\u003C和\u003E(since 5.3.0)</p>
@@ -456,7 +457,32 @@
 </blockquote>
 </li>
 </ul>
-<h2 id="To-be-continue。。。"><a href="#To-be-continue。。。" class="headerlink" title="To be continue。。。"></a>To be continue。。。</h2>
+<h2 id="json-decode"><a href="#json-decode" class="headerlink" title="json_decode"></a>json_decode</h2><h3 id="函数说明-1"><a href="#函数说明-1" class="headerlink" title="函数说明"></a>函数说明</h3><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mixed json_decode ( <span class="built_in">string</span> $json [, bool $assoc = <span class="literal">FALSE</span> [, <span class="built_in">int</span> $depth = <span class="number">512</span> [, <span class="built_in">int</span> $options = <span class="number">0</span> ]]] )</div></pre></td></tr></table></figure>
+<p>将一个json字符串转换成php中的数组</p>
+<h3 id="详细参数说明-1"><a href="#详细参数说明-1" class="headerlink" title="详细参数说明"></a>详细参数说明</h3><p><strong>json</strong>: 待转换的json串<br><strong>assoc</strong>: TRUE: json串转换为数据;FALSE: 转换为对象<br><strong>depth</strong>: 用户指定的可以处理的递归深度<br><strong>options</strong>: 对json进行decode的选项</p>
+<ul>
+<li><p>JSON_BIGINT_AS_STRING: 将大整数转换为字符串而不是浮动，这是默认值</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$json</span> = <span class="string">'&#123;"number": 12345678901234567890&#125;'</span>;</div><div class="line"><span class="variable">$data</span> = json_decode(<span class="variable">$json</span>);</div><div class="line">var_dump(<span class="variable">$data</span>);</div><div class="line"><span class="regexp">//</span>输出</div><div class="line"><span class="regexp">//</span>object(stdClass)<span class="comment">#1 (1) &#123;</span></div><div class="line"><span class="regexp">//</span>  [<span class="string">"number"</span>]=&gt;</div><div class="line"><span class="regexp">//</span>  float(<span class="number">1.2345678901235</span>E+<span class="number">19</span>)</div><div class="line"><span class="regexp">//</span>&#125;</div><div class="line"><span class="variable">$data2</span> = json_decode(<span class="variable">$json</span>, false, <span class="number">512</span>, JSON_BIGINT_AS_STRING);</div><div class="line">var_dump(<span class="variable">$data2</span>);</div><div class="line"><span class="regexp">//</span>object(stdClass)<span class="comment">#2 (1) &#123;</span></div><div class="line"><span class="regexp">//</span>  [<span class="string">"number"</span>]=&gt;</div><div class="line"><span class="regexp">//</span>  string(<span class="number">20</span>) <span class="string">"12345678901234567890"</span></div><div class="line"><span class="regexp">//</span>&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>JSON_OBJECT_AS_ARRAY: 效果不明。。。。详见官网说明</p>
+<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p>改方法的使用方法主要是要记住第二个参数。否则转换成的是对象而不是数据。</p>
+</li>
+</ul>
+<h2 id="json-last-error"><a href="#json-last-error" class="headerlink" title="json_last_error"></a>json_last_error</h2><h3 id="函数说明-2"><a href="#函数说明-2" class="headerlink" title="函数说明"></a>函数说明</h3><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> json_last_error ( <span class="keyword">void</span> )</div><div class="line">返回最近一次json_ddecode/json_encode发生的错误</div></pre></td></tr></table></figure>
+<h3 id="返回结果说明"><a href="#返回结果说明" class="headerlink" title="返回结果说明"></a>返回结果说明</h3><ul>
+<li>JSON_ERROR_NONE =&gt; 0: 未发生错误</li>
+<li>JSON_ERROR_DEPTH =&gt; 1: 超出最大深度 </li>
+<li>JSON_ERROR_STATE_MISMATCH =&gt; 2: json格式不正确  </li>
+<li>JSON_ERROR_CTRL_CHAR =&gt; 3: 控制字符错误</li>
+<li>JSON_ERROR_SYNTAX =&gt; 4: 语法错误</li>
+<li>JSON_ERROR_UTF8 =&gt; 5: 格式错误的UTF-8字符</li>
+<li>JSON_ERROR_RECURSION =&gt; 6: 要编码的值中的一个或多个递归引用 (since 5.5.0)</li>
+<li>JSON_ERROR_INF_OR_NAN =&gt; 7: 要编码的值中有一个或多个NAN或INF值 (since 5.5.0)</li>
+<li>JSON_ERROR_UNSUPPORTED_TYPE =&gt; 8: 给出了一个无法编码的类型的值 (since 5.5.0)</li>
+<li>JSON_ERROR_INVALID_PROPERTY_NAME =&gt; 9: 给出了一个无法编码的属性名称 (since 7.0.0)</li>
+<li>JSON_ERROR_UTF16 =&gt; 10: 格式错误的UTF-16字符 (since 7.0.0)</li>
+</ul>
+
       
     </div>
     
@@ -656,7 +682,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#json-encode"><span class="nav-number">2.</span> <span class="nav-text">json_encode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数说明"><span class="nav-number">2.1.</span> <span class="nav-text">函数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细参数说明"><span class="nav-number">2.2.</span> <span class="nav-text">详细参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#To-be-continue。。。"><span class="nav-number">3.</span> <span class="nav-text">To be continue。。。</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#json-encode"><span class="nav-number">2.</span> <span class="nav-text">json_encode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数说明"><span class="nav-number">2.1.</span> <span class="nav-text">函数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细参数说明"><span class="nav-number">2.2.</span> <span class="nav-text">详细参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">2.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#json-decode"><span class="nav-number">3.</span> <span class="nav-text">json_decode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数说明-1"><span class="nav-number">3.1.</span> <span class="nav-text">函数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#详细参数说明-1"><span class="nav-number">3.2.</span> <span class="nav-text">详细参数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结-1"><span class="nav-number">3.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#json-last-error"><span class="nav-number">4.</span> <span class="nav-text">json_last_error</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数说明-2"><span class="nav-number">4.1.</span> <span class="nav-text">函数说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回结果说明"><span class="nav-number">4.2.</span> <span class="nav-text">返回结果说明</span></a></li></ol></li></ol></div>
             
 
           </div>
