@@ -92,19 +92,19 @@
 
 
 
-<meta name="description" content="意图 保证一个类仅有一个实例，并提供访问它的全局访问点  我的理解：">
+<meta name="description" content="意图 保证一个类仅有一个实例，并提供访问它的全局访问点">
 <meta name="keywords" content="设计模式,design patterns,单例模式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="单例模式">
 <meta property="og:url" content="https://musezhang.github.io/2017/09/23/design-patterns-singleton/index.html">
 <meta property="og:site_name" content="米堆的一亩三分地">
-<meta property="og:description" content="意图 保证一个类仅有一个实例，并提供访问它的全局访问点  我的理解：">
+<meta property="og:description" content="意图 保证一个类仅有一个实例，并提供访问它的全局访问点">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://www.phppan.com/wp-content/uploads/2010/06/Singleton.jpg">
-<meta property="og:updated_time" content="2018-03-18T15:58:48.000Z">
+<meta property="og:updated_time" content="2018-06-20T09:33:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="单例模式">
-<meta name="twitter:description" content="意图 保证一个类仅有一个实例，并提供访问它的全局访问点  我的理解：">
+<meta name="twitter:description" content="意图 保证一个类仅有一个实例，并提供访问它的全局访问点">
 <meta name="twitter:image" content="http://www.phppan.com/wp-content/uploads/2010/06/Singleton.jpg">
 
 
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计</span>
                 
                 <span title="字数统计">
-                  230
+                  394
                 </span>
               
 
@@ -386,7 +386,7 @@
                   <span class="post-meta-item-text">阅读时长</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -410,21 +410,24 @@
         <h2 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h2><blockquote>
 <p>保证一个类仅有一个实例，并提供访问它的全局访问点</p>
 </blockquote>
-<p>我的理解：<br><a id="more"></a></p>
+<a id="more"></a>
 <h2 id="适用性"><a href="#适用性" class="headerlink" title="适用性"></a>适用性</h2><blockquote>
 <ul>
 <li>当类只能有一个实例，而且客户可以从一个众所周知的访问点访问它</li>
 <li>当这个唯一的实例应该是通过子类化可扩展的，并且客户应该无需更改代码就能使用一个扩展的实例时</li>
 </ul>
 </blockquote>
-<p>我的理解：</p>
+<p>我的理解：<br>单例模式主要用于只能创建一个对象实例的场景，如db类，文件类，cache类这些，防止过多的连接造成资源的浪费。</p>
 <h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p><img src="http://www.phppan.com/wp-content/uploads/2010/06/Singleton.jpg" alt="singleton"></p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">testsingleton();</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">singleton</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> $object = <span class="keyword">null</span>;</div><div class="line">  </div><div class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">print</span> <span class="string">"create object\n"</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">self</span>::$object == <span class="keyword">null</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">self</span>::$object = <span class="keyword">new</span> singleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>::$object;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testsingleton</span><span class="params">()</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    $object = singleton::getInstance();</div><div class="line"></div><div class="line">    $object2 = singleton::getInstance();</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> $object == $object2 ? <span class="string">"one object"</span> : <span class="string">'tow object'</span>;</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> PHP_EOL;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h2 id="明显特征"><a href="#明显特征" class="headerlink" title="明显特征"></a>明显特征</h2><ol>
-<li>定义了一个public类型的用来返回对象的方法</li>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">testsingleton();</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">singleton</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> $object = <span class="keyword">null</span>;</div><div class="line">  </div><div class="line">    <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">print</span> <span class="string">"create object\n"</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">getInstance</span><span class="params">()</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">self</span>::$object == <span class="keyword">null</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">self</span>::$object = <span class="keyword">new</span> singleton();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>::$object;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__clone</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">    <span class="keyword">private</span> <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span><span class="params">()</span></span>&#123;&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">testsingleton</span><span class="params">()</span></span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    $object = singleton::getInstance();</div><div class="line"></div><div class="line">    $object2 = singleton::getInstance();</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> $object === $object2 ? <span class="string">"one object"</span> : <span class="string">'tow object'</span>;</div><div class="line"></div><div class="line">    <span class="keyword">echo</span> PHP_EOL;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="明显特征"><a href="#明显特征" class="headerlink" title="明显特征"></a>明显特征</h2><p>1公(getInstance)4私(object,__construct,__clone,__wakeup)</p>
+<ol>
+<li>定义了一个public类型的用来返回对象的方法,只能通过该方法生成对象</li>
 <li>定义了一个人private的私有属性，代表具体的类对象，只能通过public方法获得</li>
-<li>非public的构造函数，不可直接new对象</li>
+<li>非public的构造函数，不可直接new对象，如果__construct是共有的，就意味着可以使用new创建对象，这样会产生不同的对象</li>
+<li>为了防止使用<strong>clone</strong>复制对象，使用<strong>unserialize</strong>反序列化得到对象,需要将<strong>clone和</strong>wakeup对象重新定义为两个什么都不做的私有方法。</li>
 </ol>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p>1.<a href="https://www.awaimai.com/patterns/singleton" target="_blank" rel="external">单例模式</a><br>2.<a href="http://blog.gaoyuan.xyz/2014/04/26/singleton-pattern-in-php/" target="_blank" rel="external">Php中的单例模式面面观</a></p>
 
       
     </div>
@@ -548,7 +551,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -570,7 +573,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -629,7 +632,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#意图"><span class="nav-number">1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适用性"><span class="nav-number">2.</span> <span class="nav-text">适用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构"><span class="nav-number">3.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">4.</span> <span class="nav-text">代码示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#明显特征"><span class="nav-number">5.</span> <span class="nav-text">明显特征</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#意图"><span class="nav-number">1.</span> <span class="nav-text">意图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适用性"><span class="nav-number">2.</span> <span class="nav-text">适用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构"><span class="nav-number">3.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码示例"><span class="nav-number">4.</span> <span class="nav-text">代码示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#明显特征"><span class="nav-number">5.</span> <span class="nav-text">明显特征</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">6.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
             
 
           </div>

@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="houhou," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="sorry, you can&apos;t read this post!">
+<meta name="keywords" content="houhou">
+<meta property="og:type" content="article">
+<meta property="og:title" content="待办">
+<meta property="og:url" content="https://musezhang.github.io/2018/06/20/towrite/index.html">
+<meta property="og:site_name" content="米堆的一亩三分地">
+<meta property="og:description" content="sorry, you can&apos;t read this post!">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-20T14:32:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="待办">
+<meta name="twitter:description" content="sorry, you can&apos;t read this post!">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: false,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://musezhang.github.io/2018/06/20/towrite/"/>
+
+
+
+
+
+  <title>待办 | 米堆的一亩三分地</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?43e13b8b395fbf3f20f4a0a781d37cb1";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">米堆的一亩三分地</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">米堆的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://musezhang.github.io/2018/06/20/towrite/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="米堆">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="米堆的一亩三分地">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">待办</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-20T17:40:08+08:00">
+                2018-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/个人生活/" itemprop="url" rel="index">
+                    <span itemprop="name">个人生活</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计</span>
+                
+                <span title="字数统计">
+                  98
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长</span>
+                
+                <span title="阅读时长">
+                  1
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="/crypto-js.js"></script><script src="/mcommon.js"></script><h3 id="encrypt-message">sorry, you can't read this post!</h3><link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"> <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script> <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script> <div id="security"> <div> <div class="input-group"> <input type="text" class="form-control" aria-label="Enter the password." id="pass"/> <div class="input-group-btn"> <button type="button" class="btn btn-default" onclick="decryptAES()">Decrypt</button> </div> </div> </div> </div> <div id="encrypt-blog" style="display:none"> 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 </div>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/houhou/" rel="tag"># houhou</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/19/multi-process-of-php/" rel="next" title="php 多进程">
+                <i class="fa fa-chevron-left"></i> php 多进程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/20/design-patterns-factory/" rel="prev" title="工厂模式">
+                工厂模式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://ouh80ee40.bkt.clouddn.com/2c8c0d788eb232f704491bb3114952ca.jpg"
+               alt="米堆" />
+          <p class="site-author-name" itemprop="name">米堆</p>
+           
+              <p class="site-description motion-element" itemprop="description">web开发，php开发相关技术记录和积累</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/musezhang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1673800462" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#encrypt-message"><span class="nav-number">1.</span> <span class="nav-text">sorry, you can't read this post!</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">米堆</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
